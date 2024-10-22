@@ -1,0 +1,95 @@
+.task-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  padding: 20px;
+  max-width: 400px;
+  min-height: 250px; /* Set a minimum height to keep the cards uniform */
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column; /* Ensure the card content is vertically aligned */
+}
+
+.task-card:hover {
+  transform: translateY(-5px);
+}
+
+.task-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis for long text */
+  max-width: 80%; /* Limit the width so the title and badge don't overlap */
+}
+
+.priority-badge {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.badge-high {
+  background-color: red;
+  color: white;
+}
+
+.badge-medium {
+  background-color: orange;
+  color: white;
+}
+
+.badge-low {
+  background-color: green;
+  color: white;
+}
+
+.task-card-body {
+  margin: 20px 0;
+  flex-grow: 1; /* Allow the body to take up the remaining space */
+}
+
+.task-desc {
+  font-size: 1rem;
+  color: #333;
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis for long descriptions */
+  max-width: 100%; /* Make sure it stays within the card's width */
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  color: white;
+  margin-top: 10px;
+}
+
+.badge-pending {
+  background-color: blue;
+}
+
+.badge-running {
+  background-color: orange;
+}
+
+.badge-finished {
+  background-color: green;
+}
+
+.task-card-footer {
+  font-size: 0.9rem;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

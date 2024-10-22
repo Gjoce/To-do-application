@@ -1,0 +1,142 @@
+/* General styles */
+body {
+  margin: 0;
+  font-family: Poppins, sans-serif;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  height: 90px;
+  background-color: #142d4c;
+  padding: 20px;
+}
+
+.nav--ul {
+  list-style-type: none;
+  margin-left: auto;
+  padding: 20px;
+}
+
+.nav--h1 {
+  font-weight: bold;
+  font-size: 2rem;
+  color: white;
+}
+
+/* Add Task Button */
+.add-task-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #f05454;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-family: Poppins, sans-serif;
+}
+
+.add-task-btn:hover {
+  background-color: #ff7f7f;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.add-task-btn:focus {
+  outline: none;
+}
+
+/* Popup Overlay with transition */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Popup Form */
+.popup-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  position: relative;
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.popup-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.popup-form.active {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Popup header */
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.close-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Form styles */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-control,
+.form-select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.submit-button {
+  text-align: right;
+  font-family: Poppins, sans-serif;
+}
+
+.btn-submit {
+  background-color: #9fd3c7;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  font-family: Poppins, sans-serif;
+}
+
+.btn-submit:hover {
+  background-color: #61a091;
+}

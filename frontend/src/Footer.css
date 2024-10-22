@@ -1,0 +1,8 @@
+footer {
+  display: flex;
+  padding: 20px;
+  margin: 0;
+  font-family: Poppins, sans-serif;
+  justify-content: center;
+  align-items: center;
+}
