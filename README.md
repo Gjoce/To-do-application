@@ -112,27 +112,53 @@ Struktura projekta je organizirana na naslednji način:
 ```plaintext
 project-root/
 │
-├── frontend/                                                                      # React projekt (Vite)
-│   ├── public/                
-│   ├── src/                                                                       # Izvorne datoteke
-│   │   ├── components/AddTask,Footer,Navbar,Task,TaskList,UpdateTaskPopup         # React komponente
-│   │   ├── App.tsx                                                                # Glavna komponenta aplikacije
-│   │   ├── main.tsx                                                               # Vstopna točka aplikacije
-│   │   └── ...css
-│   └── package.json                                                               # Konfiguracijska datoteka za npm
+├── frontend/                                  # React frontend (Vite setup)
+│   ├── public/                                
+│   ├── src/                                   # Source datoteke
+│   │   ├── assets/                            # Staticne datoteke kot img
+│   │   ├── components/                        # Komponente
+│   │   │   ├── AddTask.tsx                    # Dodaj nalogo
+│   │   │   ├── Footer.tsx                     # Footer komponent
+│   │   │   ├── Navbar.tsx                     # Navbar komponent
+│   │   │   ├── Task.tsx                       # Task komponent
+│   │   │   ├── TaskList.tsx                   # Prikaz
+│   │   │   └── UpdateTaskPopup.tsx            # Posodabljanje nalogo
+│   │   ├── App.tsx                            # Main app komponento
+│   │   ├── main.tsx                           # Vhodna mesto za aplikacijo
+│   │   └── Footer.css                         # CSS 
+|   |   └── Navbar.css
+|   |   └── TaskCard.css                 
+│   └── package.json                           # KOnfiguracijska dattoteka za npm
 │
-├── backend/                                                                       # Spring Boot projekt
-│   ├── src/main/java                                                              # Java izvorne datoteke
-│   │   ├── si/um/si/                                                              # Paket aplikacije
-│   │   │   ├── controller/TaskController                                          # Kontrolerji za REST API
-│   │   │   ├── model/Task                                                         # Modeli (entitete)
-│   │   │   ├── repository/TaskRepository                                          # Vmesniki za dostop do podatkov
-│   │   │   └── service/TaskService                                                # Logika storitev
-│   │   └── ...
-│   ├── src/main/resources/application/properties                                  # Viri 
-│   └── pom.xml                                                                    # Konfiguracijska datoteka za Maven
+├── backend/                                   # Spring Boot backend
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   │   └── si/um/si/                  # Java struktura
+│   │   │   │       ├── controller/            # REST kontrolerji
+│   │   │   │       │   └── TaskController.java# KOntroler za API
+│   │   │   │       ├── model/                 # Data modeli (entiteti)
+│   │   │   │       │   ├── Task.java          # Task enititeta
+│   │   │   │       │   └── enums/             # Enums 
+│   │   │   │       │       ├── TaskPriority.java
+│   │   │   │       │       └── TaskStatus.java
+│   │   │   │       ├── repository/            # Repozitorij za data access
+│   │   │   │       │   └── TaskRepository.java
+│   │   │   │       └── service/               # Business logika
+│   │   │   │           └── TaskService.java
+│   │   │   └── resources/
+│   │   │       ├── application.properties     # Konfiguracijski podatki
+│   │   │       └── static/                    # Staticne datoteke
+│   │   │           └── assets/
+│   │   │                                      # Static HTML file
+│   │   └── test/                              # Test files za backend
+│   ├── pom.xml                                # Maven konfiguracija
+|    └── .env                                  #.env za environment variables                            
 │
-└── README.md                                                                      # Dokumentacija projekta
+└── README.md                                  # Dokumentacija
+└── .gitignore                                 # Datoteke v gitignore
+                                      
+
 
 ```
 
