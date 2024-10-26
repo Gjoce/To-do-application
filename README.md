@@ -16,6 +16,7 @@ Ta projekt je **Aplikacija To-Do**, ki sestoji iz **React frontenda** (uporaba V
 - [Skripte](#skripte)
 - [Uporaba](#uporaba)
 - [Prispevanje](#prispevanje)
+- [Dodatne informacije](#dodatne-informacije)
 - [Licenca](#licenca)
 
 ## Tehnologije
@@ -93,14 +94,14 @@ Ta projekt uporablja **MySQL** kot sistem za upravljanje baz podatkov. Vsebuje t
 
 **SpringBoot Setup (backend)**: 
 
- **Visit the Spring Initializr**: Go to [https://start.spring.io/].
+ **We used the springboot initializer: [https://start.spring.io/].
 
- **Configure the Project**:
+ **Configuring the Project**:
    - Choose *Maven* or *Gradle* as the project type.
    - Select *Java* as the language.
    - Enter metadata like *Group*, *Artifact*, and *Name*.
 
- **Add Dependencies**: Select the necessary dependencies (e.g., Spring Web, Spring Data JPA, MySQL Driver, Spring Boot DevTools).
+ **Add Dependencies**: Selected the necessary dependencies (e.g., Spring Web, Spring Data JPA, MySQL Driver, Spring Boot DevTools).
 
  **Generate the Project**: Click *Generate* to download a ZIP file.
 
@@ -112,7 +113,7 @@ Ta projekt uporablja **MySQL** kot sistem za upravljanje baz podatkov. Vsebuje t
    
 
 
- **Vite with React setup (frontend)**:
+ **Vite with React setup (frontend)**: This is process thats was use to create the frontend.
    -Navigate to the frontend directory
    -Install all necessary dependencies 
       npm create vite@latest (project name)
@@ -124,7 +125,9 @@ Ta projekt uporablja **MySQL** kot sistem za upravljanje baz podatkov. Vsebuje t
       npm run dev (to start application) which should run here: http://localhost:5173
 
 
-### **Environmental Variables [Spremenljivke okolja] 
+### Spremenljivke okolja
+
+**Environmental Variables**
 
 6. **Setup**:
    create an .env file inside the backend/.env file:  This is required to store sensitive database credentials
@@ -144,7 +147,9 @@ spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
 
 
-### Component Overview [Pregled komponent]
+## Pregled komponent 
+
+ (Component Overview)
 
 The application is composed of the following components:
 
@@ -154,7 +159,8 @@ The application is composed of the following components:
 
 
 
-### REST API Endpoints
+## REST API končne točke
+
 Overview
 
 The backend provides the following REST API endpoints for managing tasks:
@@ -168,9 +174,9 @@ DELETE	/api/tasks/{id}	Deletes a task by its ID
 
 
 
+## kripte
 
-### Scripts [Skripte]
-**Frontend Scripts**
+
 
 In the frontend directory, you can use the following scripts:
 
@@ -188,7 +194,7 @@ In the backend directory, you can use the following scripts:
 
 
 
-### Usage [Uporaba]
+### Uporaba
 
    After setting up the application and running both the frontend and backend with database configurations, you can:
 
@@ -199,7 +205,7 @@ In the backend directory, you can use the following scripts:
 
 
 
-### Contribution [Prispevanje]
+###  Prispevanje
 
    Contibutions are always welcome.
    Just follws these steps
@@ -213,7 +219,7 @@ In the backend directory, you can use the following scripts:
 
 
 
-### Additional Information [Dodatne informacije]
+### Dodatne informacije
 
     Ensure that both the MySQL server and the backend server are running before starting the frontend.
     The frontend will communicate with the backend at http://localhost:8080 by default.
@@ -222,6 +228,6 @@ In the backend directory, you can use the following scripts:
 
     
 
-### License [Licenca]
+### Licenca
 
 This project is licensed under the MIT License - see the LICENSE file for more details.
