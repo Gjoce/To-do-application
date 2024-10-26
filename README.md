@@ -159,7 +159,7 @@ The application is composed of the following components:
 
 
 
-## REST API končne točke
+### rest-api-konce-točke
 
 Overview
 
@@ -174,7 +174,7 @@ DELETE	/api/tasks/{id}	Deletes a task by its ID
 
 
 
-## kripte
+## Skripte
 
 
 
@@ -226,8 +226,7 @@ In the backend directory, you can use the following scripts:
     .env files should be added to .gitignore to prevent sensitive information from being uploaded to the repository.
 
 
-    
-
+   
 ### Licenca
 
-This project is licensed under the MIT License - see the LICENSE file for more details.
+
