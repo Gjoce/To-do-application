@@ -13,6 +13,7 @@ Ta projekt je **Aplikacija To-Do**, ki sestoji iz **React frontenda** (uporaba V
     - [Namestitev Frontenda](#namestitev-frontenda)
     - [Namestitev Backenda](#namestitev-backenda)
 - [Struktura projekta](#struktura-projekta)
+- [Standardi kodiranja](#standardi-kodiranja)
 - [REST API koncne tocke](#rest-api-koncne-tocke)
 - [Skripte](#skripte)
 - [Uporaba](#uporaba)
@@ -161,6 +162,25 @@ project-root/
 
 
 ```
+
+## Standardi Kodiranja
+
+### Imenovanje
+- **Spremenljivke**: Imenovanje spremenljivk je v camelCase formatu. 
+- **Funkcije in metode**: Ime funkcij in metod so prav tako v camelCase formatu, je pa opisno in se začne z glagolom (npr. `getTaskById`).
+
+### Struktura datotek
+- **Frontend**:
+  - Komponente so v isti mapi (npr. `Navbar.tsx` in `TaskList.tsx`).
+  - Glavne datoteke in konfiguracije, kot je `App.tsx`, so v `src/`.
+- **Backend**:
+  - Sledi čisti strukturi po odgovornostih (npr. `controller`, `model`, `service`).
+
+### Stilski standardi
+- **Indentacija**: Uporabi 2 ali 4 presledke za indentacijo (sledi standardom ekipe).
+- **Komentiranje**: Uporabi komentarje za pojasnitev kompleksne logike, vendar se izogibaj prekomernemu komentiranju očitnega.
+- **Dolžina vrstice**: Priporočljiva dolžina vrstice je 80-100 znakov.
+
 
 ## REST API koncne tocke
 
