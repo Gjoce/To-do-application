@@ -29,7 +29,9 @@ Ta projekt je **Aplikacija To-Do**, ki sestoji iz **React frontenda** (uporaba V
 - **CSS/Styled Components** 
 
 ### Backend
-- **Spring Boot** (Maven)
+- **Spring Boot 3.3.4** (Maven)
+- **MySQL Connector (8.0.33)**
+- **Java Dotenv (5.2.2)**
 - **Java SDK 21**
 - **MySQL** (za bazo podatkov)
 
