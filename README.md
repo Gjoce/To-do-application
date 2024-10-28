@@ -88,6 +88,11 @@ Ta projekt je **Aplikacija To-Do**, ki sestoji iz **React frontenda** (uporaba V
 
 #### Namestitev Backenda
 
+2. **Namestitev odvisnosti in gradnja projekta:**
+    Zaženite naslednji ukaz Maven, da namestite odvisnosti in zgradite projekt
+   ```bash
+   mvn clean install
+
 1. **Nastavite .env datoteko:**
      V korenu backend direktorija ustvarite .env datoteko.
      Dodajte konfiguracijo za MySQL:
@@ -104,7 +109,10 @@ Ta projekt je **Aplikacija To-Do**, ki sestoji iz **React frontenda** (uporaba V
   
 3. **Zaženite backend:**
 
-    V IntelliJ odprite meni ***Run*** in zaženite backend strežnik.
+    V IntelliJ odprite meni ***Run*** in zaženite backend strežnik ali pa to naredite z naslednjim ukazom:
+     ```bash
+     mvn spring-boot:start
+     ```
     Vaša Spring Boot aplikacija se bo povezala na MySQL podatkovno bazo, kot je določeno v konfiguraciji, in se zagnala na http://localhost:8080        ali na portu, določenem v application.properties.
 
 
@@ -212,9 +220,15 @@ Tu so skripte, ki jih uporabljate v namestitvi za zagon projekta:
  
 - **Namestitev za backend(.env datoteka):**
    ```bash
+   mvn clean install
+   ```
+   ```bash
    SPRING_DATASOURCE_URL={VAS URL V OBLIKI} jdbc:mysql://localhost:[PORT]/[DATABAZA]?useSSL=false&serverTimezone=UTC
    SPRING_DATASOURCE_USERNAME={VAS USERNAME}
    SPRING_DATASOURCE_PASSWORD={VASE GESLO}
+   ```
+    ```bash
+     mvn spring-boot:start
   
 
 ### Uporaba
