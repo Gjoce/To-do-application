@@ -267,3 +267,18 @@ Prispevki so vedno dobrodošli! Sledite tem korakom:
 
 Ta projekt trenutno ni licenciran. Za prihodnje spremembe licenciranja spremljajte ta repozitorij.
 
+### Namen aplikacije
+
+   To-Do aplikacija je namenjena širokemu spektru uporabnikov, vključno z zaposlenimi, študenti, in vsakomur, ki želi izboljšati svoje veščine upravljanja s časom in optimizirati vsakodnevne naloge.
+
+### Izboljšanje uporabniške izkušnje
+
+- Naša To-Do aplikacija se osredotoča na reševanje pogostih izzivov, s katerimi se uporabniki srečujejo, kot sta preobremenjenost s številnimi nalogami in pozabljanje pomembnih rokov. Aplikacija ponuja preprost in intuitiven postopek organizacije nalog ter napredne funkcionalnosti za upravljanje časa, kar uporabnikom omogoča učinkovito obvladovanje vsakdanjih obveznosti.
+
+### Cilji
+
+- Povečanje produktivnosti: Aplikacija omogoča uporabnikom, da hitro ustvarijo in razvrstijo naloge, kar jim pomaga pri boljši organizaciji dela   in prioritet.
+- Preprečevanje pozabljanja: Z možnostjo nastavljanja opomnikov uporabniki nikoli ne pozabijo na pomembne roke in naloge.
+- Enostavna uporaba: Intuitiven uporabniški vmesnik zagotavlja enostavno navigacijo, kar uporabnikom omogoča hitro prilagajanje aplikaciji.
+
+
