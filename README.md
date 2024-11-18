@@ -45,7 +45,245 @@ Ta projekt je **Aplikacija To-Do**, ki sestoji iz **React frontenda** (uporaba V
   - ***Backend:*** Razvit v Spring Boot, nudi REST API za komunikacijo s frontend-om in upravlja podatke v MySQL bazi podatkov.
 
   - ***Baza podatkov:*** MySQL, shranjuje podatke nalog, informacije o uporabnikih in druge potrebne podrobnosti.
+### 1. UserController
+**Opis:**
+`UserController` je odgovoren za upravljanje uporabnikov, vključno z registracijo, posodabljanjem profilov in pridobivanjem podatkov, povezanih z uporabniki, kot so naloge ali dogodki. Deluje kot vstopna točka za vse funkcionalnosti, povezane z uporabniki.  
 
+**Ključna metoda:**
+```bash
+registerUser(@RequestBody user: User): User
+```
+**Namen:**
+Omogoča registracijo uporabnika z vnosom uporabniških podatkov in shranjevanjem uporabnika v bazo podatkov.  
+**Primer uporabe:**
+Nov uporabnik se prijavi v sistem z vnosom svojega imena, e-pošte in gesla.  
+
+### 2. TaskController 
+**Opis:**
+`TaskController` omogoča upravljanje nalog z nudenjem endpointov za ustvarjanje, pridobivanje, posodabljanje in brisanje nalog. Prav tako omogoča filtriranje nalog glede na njihov status (npr. `COMPLETED`, `PENDING`).   
+
+**Ključna metoda:**
+```bash
+`getAllTasks(@RequestParam(required = false) status: String): List<Task>`  
+```
+**Namen:**
+Pridobi vse naloge v sistemu. Če je parameter `status` podan, naloge filtrira glede na ta status.  
+**Primer uporabe:**
+Uporabnik pregleda vse svoje naloge ali jih filtrira, da vidi samo naloge, ki so v čakanju (`PENDING`).    
+
+### 3. EventController 
+**Opis:**
+`EventController` upravlja operacije, povezane z dogodki, vključno z ustvarjanjem, posodabljanjem in pridobivanjem dogodkov. Omogoča tudi upravljanje udeležencev dogodkov in filtriranje dogodkov glede na tip.    
+
+**Ključna metoda:**
+```bash
+`getAllEvents(@RequestParam(required = false) type: String): List<Event>`  
+```
+**Namen:**
+ Pridobi vse dogodke. Če je parameter `type` podan, dogodke filtrira glede na določeni tip.    
+**Primer uporabe:**
+Uporabnik pregleda vse razpoložljive dogodke ali jih filtrira, da vidi samo delavnice (`workshops`).  
+
+### 3. Task Model
+**Opis:**
+•	Task je entiteta, ki predstavlja naloge v sistemu. Vsaka naloga vsebuje naslov, opis, status, prioriteto, rok za dokončanje ter časovne oznake za ustvarjanje in posodabljanje naloge. Naloge imajo različne statuse (npr. PENDING, COMPLETED) in prioritete (npr. LOW, HIGH), ki jih je mogoče filtrirati za boljše upravljanje nalog.
+•	Status in prioriteta naloge sta shranjena kot Enum tipa, kar omogoča boljšo obvladovanje teh vrednosti v aplikaciji.
+•	Časovne oznake createdAt in updatedAt se samodejno posodabljajo ob ustvarjanju in spreminjanju naloge.
+
+**Ključne lastnosti:**
+•	Id: Unikatni identifikator naloge.
+•	Title: Naslov naloge, ki je obvezen.
+•	Description: Opis naloge, ki je neobvezen in lahko vsebuje do 1000 znakov.
+•	Status: Status naloge (npr. PENDING, COMPLETED), ki je obvezen.
+•	Priority: Prioriteta naloge (npr. LOW, HIGH), ki je obvezen.
+•	DueDate: Rok za dokončanje naloge, ki je neobvezen.
+•	CreatedAt: Datum in čas, ko je bila naloga ustvarjena (samodejno nastavljeno).
+•	UpdatedAt: Datum in čas, ko je bila naloga nazadnje posodobljena (samodejno nastavljeno).
+
+   
+
+**Ključna metoda:**
+```bash
+@PrePersist
+protected void onCreate() {
+    this.createdAt = LocalDateTime.now();
+}
+
+@PreUpdate
+protected void onUpdate() {
+    this.updatedAt = LocalDateTime.now();
+}
+ 
+```
+**Namen:**
+ Avtomatsko posodabljanje 
+**Taskpriority Enum(prioriteto naloge)**
+	LOW
+	MEDIUM	
+	HIGH
+ **Taskstatus Enum(status naloge)**
+	PENDING
+	RUNNING	
+	COMPLETED
+
+**Primer uporabe:**
+•	Ko uporabnik ustvari novo nalogo, vključi naslov, opis, status, prioriteto, ter datum, do katerega mora biti naloga zaključena. Ob tem se naloga shrani v bazo podatkov, kjer se beležijo podatki o času ustvarjanja in zadnjem posodabljanju.
+
+### 4. Event Model
+**Opis:**
+•	Event je entiteta, ki predstavlja dogodke v sistemu. Vsak dogodek vsebuje naslov, opis, tip dogodka, status, prioriteto, datum začetka, datum zaključka ter časovne oznake za ustvarjanje in posodabljanje dogodka. Dogodki imajo različne statuse (npr. PENDING, COMPLETED) in prioritete (npr. LOW, HIGH), ki jih je mogoče filtrirati za boljše upravljanje dogodkov.
+•	Tip dogodka in status sta shranjena kot Enum tipa, kar omogoča boljše obvladovanje teh vrednosti v aplikaciji.
+•	Časovne oznake createdAt in updatedAt se samodejno posodabljajo ob ustvarjanju in spreminjanju dogodka.
+
+
+**Ključne lastnosti:**
+•	Id: Unikatni identifikator dogodka.
+•	Title: Naslov dogodka, ki je obvezen.
+•	Description: Opis dogodka, ki je neobvezen in lahko vsebuje do 1000 znakov.
+•	DueDate: Datum in cas, kdaj je dogodek.
+•	CreatedAt: Datum in čas, ko je bil dogodek ustvarjen (samodejno nastavljeno).
+•	UpdatedAt: Datum in čas, ko je bil dogodek nazadnje posodobljen (samodejno nastavljeno).
+
+**Ključna metoda:**
+```bash
+@PrePersist
+protected void onCreate() {
+    this.createdAt = LocalDateTime.now();
+}
+
+@PreUpdate
+protected void onUpdate() {
+    this.updatedAt = LocalDateTime.now();
+}
+
+ 
+```
+**Namen:**
+ Avtomatsko posodabljanje 
+
+**Primer uporabe:**
+•	Ko admin ustvari nov dogodek, vključi naslov, opis, ter datum začetka in zaključka dogodka. Ob tem se dogodek shrani v bazo podatkov, kjer se beležijo podatki o času ustvarjanja in zadnjem posodabljanju.
+
+### 5. User Model
+**Opis:**
+•	User je entiteta, ki predstavlja uporabnike v sistemu. Vsak uporabnik vsebuje ime, e-poštni naslov, geslo ter vlogo (npr. ADMIN, USER), ki določa, kakšne privilegije ima uporabnik v aplikaciji. Vloga uporabnika je shranjena kot Enum tipa, kar omogoča enostavno dodeljevanje različnih pravic glede na uporabniško vlogo.
+•	Geslo uporabnika je shranjeno v šifrirani obliki, kar zagotavlja varnost uporabniških podatkov.
+
+
+**Ključne lastnosti:**
+•	Id: Unikatni identifikator uporabnika.
+•	username: Ime uporabnika, ki je obvezen.
+•	Email: E-poštni naslov uporabnika, ki je obvezen in mora biti edinstven.
+•	Password: Geslo uporabnika, ki je obvezen in shranjeno v šifrirani obliki.
+•	Role: Vloga uporabnika (npr. ADMIN, USER), ki je obvezen in določa pravice uporabnika v aplikaciji.
+
+**Role Enum:**
+•	ADMIN: Uporabnik z vsemi privilegiji za upravljanje sistema.
+•	USER: Običajen uporabnik, ki ima omejen dostop do funkcionalnosti aplikacije.
+
+
+**Primer uporabe:**
+•	Ko uporabnik ustvari nov račun, vnese svoje ime, e-poštni naslov in geslo. Sistem dodeli vlogo uporabniku, bodisi kot USER bodisi kot ADMIN, odvisno od pravic, ki so potrebne. Ob tem se uporabnik shrani v bazo podatkov, kjer se beležijo podatki o času ustvarjanja in zadnjem posodabljanju.
+
+### 6. TaskService Razred
+**Opis:**
+Logika za upravljanje nalog. Komunicira s TaskRepository za pridobivanje in obdelavo podatkov.
+
+**Ključna metoda:**
+```bash
+•	getTasksByUserId(userId: Long): List<Task> – Pridobi naloge za določenega uporabnika.
+•	getTasksByStatus(status: String): List<Task> – Pridobi naloge glede na status.
+
+ 
+```
+**Namen:**
+ Obdeluje zahteve za naloge ter omogoča ustvarjanje, posodabljanje, pridobivanje in brisanje.
+
+**Primer uporabe:**
+• Pridobi naloge za določenega uporabnika.
+•	Uporabnik pridobi naloge glede na status.
+
+### 7. UserService Razred
+**Opis:**
+Upravljanje poslovne logike za uporabnike, povezano s UserRepository.
+
+**Ključna metoda:**
+```bash
+•	getUserById(userId: Long): User – Pridobi uporabnika z določenim ID-jem.
+•	createUser(user: User): void – Ustvari novega uporabnika.
+```
+**Namen:**
+Izvaja iskanje, ustvarjanje, posodabljanje in brisanje uporabnikov.
+
+**Primer uporabe:**
+• Admin pridobi uporabnika z določenim ID-jem.
+•	Ustvari novega uporabnika.
+
+### 8. EventRepository Vmesnik
+**Opis:**
+Vmesnik za upravljanje podatkov o dogodkih.
+
+**Ključna metoda:**
+```bash
+•	findEventById(eventId: Long): Event – Pridobi dogodek z določenim ID-jem.
+```
+**Namen:**
+Določa operacije za shranjevanje, pridobivanje, posodabljanje in brisanje dogodkov.
+
+**Primer uporabe:**
+•Admin pridobi dogodek z določenim ID-jem.
+
+### 9. TaskRepository Vmesnik
+**Opis:**
+Dostop do podatkov o nalogah in iskanje nalog glede na status ali uporabnika.
+
+**Ključna metoda:**
+```bash
+•	findByUserId(userId: Long): List<Task> – Pridobi naloge za določenega uporabnika.
+•	findByStatus(status: String): List<Task> – Pridobi naloge glede na status.
+
+```
+**Namen:**
+Izvaja poizvedbe in trajno shranjevanje nalog.
+
+**Primer uporabe:**
+• Uporabniki pogledajo svoje naloge
+• Uporabniki pogledajo status svoje naloge
+
+### 10. EventService Razred
+**Opis:**
+Obdeluje poslovno logiko za dogodke in komunicira z EventRepository.
+
+**Ključna metoda:**
+```bash
+•	getEventById(eventId: Long): Event – Pridobi dogodek z določenim ID-jem.
+•	getEventsByUserId(userId: Long): List<Event> – Pridobi dogodke za uporabnika.
+•	addEvent(event: Event): void – Ustvari nov dogodek.
+•	updateEvent(event: Event): void – Posodobi dogodek.
+•	deleteEvent(eventId: Long): void – Izbriše dogodek.
+
+
+```
+**Namen:**
+Ustvarjanje, posodabljanje, pridobivanje in brisanje dogodkov.
+
+**Primer uporabe:**
+• Uporabnik pridobi dogodek z določenim ID-jem.
+• Uporabnik pridobi vse svoje dogodke.
+• Uporabnik ustvari nov dogodek.
+• Uporabnik posodobi dogodek.
+• Uporabnik izbrise dogodek.
+
+### 11. UserRepository Vmesnik
+**Opis:**
+Upravljanje podatkov o uporabnikih.
+
+**Ključna metoda:**
+```bash
+•	findByUserId(userId: Long): User – Pridobi uporabnika z določenim ID-jem.
+```
+**Namen:**
+Izvaja operacije za shranjevanje, iskanje in brisanje podatkov o uporabnikih.
 
 ## Začnite
 
