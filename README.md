@@ -505,3 +505,73 @@ Prispevki so vedno dobrodošli! Sledite tem korakom:
 
 Ta projekt trenutno ni licenciran. Za prihodnje spremembe licenciranja spremljajte ta repozitorij.
 
+
+### Implementacija funkcionalnosti
+
+Implementirali smo funkcionalnosti kot so:
+-Upravljanja uporabnikov(UserService),
+-Upravljanja nalog (TaskRepository)  
+-Upravljanja dogodkov (EventService),
+-Upravljanje podatkovnih operacij(UserRepository, EventRepository ) 
+
+## Delovanje nove funkcionalnosti
+
+ (UserService):
+Omogoča delo z uporabniki, kot so ustvarjanje novih uporabnikov, posodabljanje, brisanje ter iskanje uporabnikov po ID-ju.
+
+(EventService):
+Omogoča iskanje in upravljanje dogodkov glede na različne kriterije (ID uporabnika, ID naloge ali tip dogodka, brisanje,posodobljenje, dodajanje dogodkov).
+
+(TaskRepository):
+Omogoča iskanje nalog, ki so povezane z določenim uporabnikom, z metodo findTaskByUser.
+
+(UserRepository):
+uporabnik se poskuša prijaviti v aplikacijo, aplikacija izda zahtevo uporabniškemu repozitoriju, da preveri, ali so uporabniške poverilnice, ki jih je posredoval, veljavne.
+
+(EventRespoistory):
+Ko uporabnik ali sistem pošlje zahtevo za dogodek z določenim ID-jem (npr. GET /events/{id}), bo EventRepository poiskal dogodek v bazi in ga vrnil, če je prisoten.
+
+### Kako uporabnik lahko dostopa do te funkcionalnosti v naso aplikacijo
+
+Pri UserService:
+Pridobivanje vseh uporabnikov:
+GET /users – Pridobi seznam vseh uporabnikov.
+Pridobivanje uporabnika po ID-ju:
+GET /users/{id} – Pridobi uporabnika z določenim ID-jem.
+Registracija uporabnika:
+POST /users – Ustvari novega uporabnika (s polji: uporabniško ime, e-pošta, geslo).
+Posodabljanje uporabnika:
+PUT /users/{id} – Posodobi uporabnika s spremenjenimi podatki (npr. uporabniško ime, e-pošta).
+Izbris uporabnika:
+DELETE /users/{id} – Izbriši uporabnika z določenim ID-jem.
+Prijava uporabnika:
+POST /login – Prijava uporabnika s preverjanjem e-pošte in gesla.
+Odjava uporabnika:
+POST /logout – Odjava uporabnika.
+
+Pri TaskRepository:
+GET /tasks?status={status} – Pridobi seznam nalog z določenim statusom (npr. PENDING, COMPLETED).
+
+Pri EventService:
+GET /events – Pridobi vse dogodke.
+GET /events?type={type} – Filtriraj dogodke po vrsti.
+GET /events/{id} – Pridobi dogodek po ID-ju.
+POST /events – Ustvari nov dogodek.
+PUT /events/{id} – Posodobi dogodek.
+DELETE /events/{id} – Izbriši dogodek.
+
+Pri UserRepository:
+GET /users?username={username} – Pridobi uporabnika po uporabniškem imenu.
+GET /users?email={email} – Pridobi uporabnika po e-poštnem naslovu.
+GET /users/exists?username={username} – Preveri, ali uporabniško ime že obstaja.
+GET /users/exists?email={email} – Preveri, ali e-poštni naslov že obstaja.
+
+Pri EventRepository:
+GET /events/start-time?start={start}&end={end} – Pridobi dogodke, katerih začetek je v določenem časovnem obdobju.
+GET /events/user/{userId} – Pridobi dogodke, povezane z določenim uporabnikom.
+GET /events/task/{taskId} – Pridobi dogodke, povezane z določenim nalogo.
+GET /events/type/{type} – Pridobi dogodke, filtrirane po vrsti dogodka.
+Te funkcionalnosti omogočajo filtriranje in iskanje dogodkov v aplikaciji.
+
+
+
