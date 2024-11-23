@@ -1,52 +1,44 @@
-import "../Navbar.css";
-import { useState } from "react";
+import React, { useState } from "react";
+import "../../Navbar.css";
 
-interface PopupFormProps {
+interface UpdateTaskPopupProps {
   isVisible: boolean;
   onClose: () => void;
+  task: {
+    id: number;
+    title: string;
+    description?: string;
+    status: string;
+    priority: string;
+    dueDate: string;
+  };
+  onUpdate: (updatedTask: any) => void;
 }
 
-function PopupForm({ isVisible, onClose }: PopupFormProps) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("PENDING");
-  const [priority, setPriority] = useState("LOW");
-  const [dueDate, setDueDate] = useState("");
+const UpdateTaskPopup: React.FC<UpdateTaskPopupProps> = ({
+  isVisible,
+  onClose,
+  task,
+  onUpdate,
+}) => {
+  const [title, setTitle] = useState(task.title);
+  const [description, setDescription] = useState(task.description || "");
+  const [status, setStatus] = useState(task.status);
+  const [priority, setPriority] = useState(task.priority);
+  const [dueDate, setDueDate] = useState(task.dueDate);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    const newTask = {
+    const updatedTask = {
+      id: task.id,
       title,
       description,
       status,
       priority,
       dueDate,
     };
-
-    try {
-      const response = await fetch("http://localhost:8080/api/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newTask),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to create task");
-      }
-
-      setTitle("");
-      setDescription("");
-      setStatus("PENDING");
-      setPriority("LOW");
-      setDueDate("");
-
-      onClose();
-    } catch (error) {
-      console.error("Error adding task:", error);
-    }
+    onUpdate(updatedTask);
+    onClose();
   };
 
   return (
@@ -59,20 +51,19 @@ function PopupForm({ isVisible, onClose }: PopupFormProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="popup-header">
-          <h2>Add New Task</h2>
+          <h2>Update Task</h2>
           <button className="close-btn" onClick={onClose}>
             X
           </button>
         </div>
         <div className="popup-body">
-          <form id="addTaskForm" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="title">Task Title</label>
               <input
                 type="text"
                 id="title"
                 className="form-control"
-                placeholder="Enter task title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
@@ -83,7 +74,6 @@ function PopupForm({ isVisible, onClose }: PopupFormProps) {
               <textarea
                 id="description"
                 className="form-control"
-                placeholder="Enter task description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               ></textarea>
@@ -120,13 +110,13 @@ function PopupForm({ isVisible, onClose }: PopupFormProps) {
                 type="datetime-local"
                 id="dueDate"
                 className="form-control"
-                value={dueDate}
+                value={dueDate.substring(0, 16)}
                 onChange={(e) => setDueDate(e.target.value)}
               />
             </div>
             <div className="submit-button">
               <button type="submit" className="btn-submit">
-                Add Task
+                Update Task
               </button>
             </div>
           </form>
@@ -134,6 +124,6 @@ function PopupForm({ isVisible, onClose }: PopupFormProps) {
       </div>
     </div>
   );
-}
+};
 
-export default PopupForm;
+export default UpdateTaskPopup;

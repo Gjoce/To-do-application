@@ -30,11 +30,12 @@ public class UsersService {
     private PasswordEncoder passwordEncoder;
 
 
-    public Users registerUser(String username, String email, String password, Role role) {
+    public Users registerUser(String username, String email, String password) {
         if (usersRepository.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException("Email is already in use.");
         }
-        Users user = new Users(username, email, passwordEncoder.encode(password), role);
+        // Set the role to USER by default
+        Users user = new Users(username, email, passwordEncoder.encode(password), Role.USER);
         return usersRepository.save(user);
     }
 

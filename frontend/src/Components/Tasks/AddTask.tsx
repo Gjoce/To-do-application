@@ -1,44 +1,52 @@
-import React, { useState } from "react";
-import "../Navbar.css";
+import "../../Navbar.css";
+import { useState } from "react";
 
-interface UpdateTaskPopupProps {
+interface PopupFormProps {
   isVisible: boolean;
   onClose: () => void;
-  task: {
-    id: number;
-    title: string;
-    description?: string;
-    status: string;
-    priority: string;
-    dueDate: string;
-  };
-  onUpdate: (updatedTask: any) => void;
 }
 
-const UpdateTaskPopup: React.FC<UpdateTaskPopupProps> = ({
-  isVisible,
-  onClose,
-  task,
-  onUpdate,
-}) => {
-  const [title, setTitle] = useState(task.title);
-  const [description, setDescription] = useState(task.description || "");
-  const [status, setStatus] = useState(task.status);
-  const [priority, setPriority] = useState(task.priority);
-  const [dueDate, setDueDate] = useState(task.dueDate);
+function PopupForm({ isVisible, onClose }: PopupFormProps) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("PENDING");
+  const [priority, setPriority] = useState("LOW");
+  const [dueDate, setDueDate] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const updatedTask = {
-      id: task.id,
+
+    const newTask = {
       title,
       description,
       status,
       priority,
       dueDate,
     };
-    onUpdate(updatedTask);
-    onClose();
+
+    try {
+      const response = await fetch("http://localhost:8080/api/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTask),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create task");
+      }
+
+      setTitle("");
+      setDescription("");
+      setStatus("PENDING");
+      setPriority("LOW");
+      setDueDate("");
+
+      onClose();
+    } catch (error) {
+      console.error("Error adding task:", error);
+    }
   };
 
   return (
@@ -51,19 +59,20 @@ const UpdateTaskPopup: React.FC<UpdateTaskPopupProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="popup-header">
-          <h2>Update Task</h2>
+          <h2>Add New Task</h2>
           <button className="close-btn" onClick={onClose}>
             X
           </button>
         </div>
         <div className="popup-body">
-          <form onSubmit={handleSubmit}>
+          <form id="addTaskForm" onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="title">Task Title</label>
               <input
                 type="text"
                 id="title"
                 className="form-control"
+                placeholder="Enter task title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
@@ -74,6 +83,7 @@ const UpdateTaskPopup: React.FC<UpdateTaskPopupProps> = ({
               <textarea
                 id="description"
                 className="form-control"
+                placeholder="Enter task description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               ></textarea>
@@ -110,13 +120,13 @@ const UpdateTaskPopup: React.FC<UpdateTaskPopupProps> = ({
                 type="datetime-local"
                 id="dueDate"
                 className="form-control"
-                value={dueDate.substring(0, 16)}
+                value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
               />
             </div>
             <div className="submit-button">
               <button type="submit" className="btn-submit">
-                Update Task
+                Add Task
               </button>
             </div>
           </form>
@@ -124,6 +134,6 @@ const UpdateTaskPopup: React.FC<UpdateTaskPopupProps> = ({
       </div>
     </div>
   );
-};
+}
 
-export default UpdateTaskPopup;
+export default PopupForm;

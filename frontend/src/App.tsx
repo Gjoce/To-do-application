@@ -1,26 +1,38 @@
-import NavigationBar from "./Components/Navbar";
-import PopupForm from "./Components/AddTask";
-import { useState } from "react";
-import TaskList from "./Components/TaskList";
-import Footer from "./Components/Footer";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Login from "./Components/Login";
+import Register from "./Components/Register";
+import Index from "./Components/Tasks/Index";
 
-export default function App() {
-  const [isFormVisible, setIsFormVisible] = useState(false);
+const App: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-  const toggleFormVisibility = () => {
-    setIsFormVisible(!isFormVisible);
-  };
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    setIsAuthenticated(!!user);
+  }, []);
 
   return (
-    <>
-      <NavigationBar onAddTaskClick={toggleFormVisibility} />
-
-      <main className="container">
-        <TaskList />
-      </main>
-
-      <PopupForm isVisible={isFormVisible} onClose={toggleFormVisibility} />
-      <Footer />
-    </>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={<Login setIsAuthenticated={setIsAuthenticated} />}
+        />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/index"
+          element={
+            isAuthenticated ? (
+              <Index />
+            ) : (
+              <Login setIsAuthenticated={setIsAuthenticated} />
+            )
+          }
+        />
+      </Routes>
+    </Router>
   );
-}
+};
+
+export default App;

@@ -1,4 +1,4 @@
-import "../TaskCard.css";
+import "../../TaskCard.css";
 
 interface TaskCardProps {
   title: string;

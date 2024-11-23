@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     private final UsersService userService;
@@ -28,8 +29,7 @@ public class UserController {
         try {
             Users user = userService.registerUser(userRequest.getUsername(),
                     userRequest.getEmail(),
-                    userRequest.getPassword(),
-                    userRequest.getRole());
+                    userRequest.getPassword());
             return ResponseEntity.ok(user);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
