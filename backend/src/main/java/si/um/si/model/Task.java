@@ -33,16 +33,20 @@ public class Task {
 
     private LocalDateTime updatedAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private Users createdBy;
+
     public Task() {}
 
-    public Task(String title, String Description, Taskstatus status, Taskpriority priority, LocalDateTime dueDate, LocalDateTime createdAt, LocalDateTime updatedAt){
+    public Task(String title, String Description, Taskstatus status, Taskpriority priority, LocalDateTime dueDate, Users createdBy) {
         this.Title = title;
         this.Description = Description;
         this.status = status;
         this.priority = priority;
         this.dueDate = dueDate;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.createdAt = LocalDateTime.now();
+        this.createdBy = createdBy;
     }
 
 

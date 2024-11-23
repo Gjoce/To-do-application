@@ -1,27 +1,56 @@
 package si.um.si.model;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
+import si.um.si.model.Users;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "Events")
 public class Event {
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(length = 1000)
     private String description;
+
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+
     private String location;
+
     private int maxParticipants;
 
-    // Constructors
-    public Event() {}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false)
+    private Users createdBy;
 
-    public Event(Long id, String name, String description, LocalDateTime startTime, LocalDateTime endTime, String location, int maxParticipants) {
-        this.id = id;
+    @ManyToMany
+    @JoinTable(
+            name = "Event_Participants",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<Users> participants = new ArrayList<>();
+
+    public Event(String name, String description, LocalDateTime startTime, LocalDateTime endTime, String location, int maxParticipants, Users createdBy) {
         this.name = name;
         this.description = description;
         this.startTime = startTime;
         this.endTime = endTime;
         this.location = location;
         this.maxParticipants = maxParticipants;
+        this.createdBy = createdBy;
+    }
+
+    public Event() {
+
     }
 
 
