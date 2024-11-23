@@ -1,22 +1,22 @@
 package si.um.si.model;
-import si.um.si.model.enums.*;
 
+import si.um.si.model.enums.*;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Tasks")
+@Table(name = "tasks")  // Lowercase table name for convention
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private long id;
 
     @Column(nullable = false)
-    private String Title;
+    private String title;
 
     @Column(length = 1000)
-    private String Description;
+    private String description;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -34,14 +34,18 @@ public class Task {
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private Users createdBy;
+    @JoinColumn(name = "created_by", nullable = false)  // Corrected column name
+    private Users createdBy;  // User who created the task
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")  // Correct column name and referencedColumn
+    private Users user;  // User the task is assigned to
 
     public Task() {}
 
-    public Task(String title, String Description, Taskstatus status, Taskpriority priority, LocalDateTime dueDate, Users createdBy) {
-        this.Title = title;
-        this.Description = Description;
+    public Task(String title, String description, Taskstatus status, Taskpriority priority, LocalDateTime dueDate, Users createdBy) {
+        this.title = title;
+        this.description = description;
         this.status = status;
         this.priority = priority;
         this.dueDate = dueDate;
@@ -49,31 +53,29 @@ public class Task {
         this.createdBy = createdBy;
     }
 
-
-    //Get in set metode
-
+    // Getters and Setters
     public long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        Title = title;
+        this.title = title;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 
     public Taskstatus getStatus() {
@@ -116,7 +118,7 @@ public class Task {
         this.updatedAt = updatedAt;
     }
 
-    //Avtomatsko posodabljanje
+    // Automatic Updates for Timestamps
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -126,8 +128,4 @@ public class Task {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
-
-
-
-
 }

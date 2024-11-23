@@ -1,75 +1,68 @@
 package si.um.si.controller;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import jakarta.validation.Valid;
-import si.um.si.Login.LoginRequest;
+import org.springframework.web.bind.annotation.*;
 import si.um.si.model.Event;
 import si.um.si.model.Task;
 import si.um.si.model.Users;
-import si.um.si.service.UserService;
+import si.um.si.service.UsersService;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
-    private final UserService userService;
+    private final UsersService userService;
 
-    
-    public UserController(UserService userService) {
+    @Autowired
+    public UserController(UsersService userService) {
         this.userService = userService;
     }
 
+    // Register user
     @PostMapping("/register")
-    public ResponseEntity<Users> registerUser(@RequestBody @Valid Users user) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(userService.registerUser(user));
+    public ResponseEntity<?> registerUser(@RequestBody Users userRequest) {
+        try {
+            Users user = userService.registerUser(userRequest.getUsername(),
+                    userRequest.getEmail(),
+                    userRequest.getPassword(),
+                    userRequest.getRole());
+            return ResponseEntity.ok(user);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Users> updateUser(@PathVariable Long id, @RequestBody @Valid Users updatedUser) {
-        return ResponseEntity.ok(userService.updateUser(id, updatedUser));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
-    }
-
+    // Login user
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody @Valid LoginRequest loginRequest) {
-        return ResponseEntity.ok(userService.loginUser(loginRequest));
+    public ResponseEntity<Users> loginUser(@RequestParam String email, @RequestParam String password) {
+        Optional<Users> user = userService.loginUser(email, password);
+        return user.map(ResponseEntity::ok).orElse(ResponseEntity.status(401).build()); // 401 Unauthorized
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<Void> logoutUser() {
-        userService.logoutUser();
-        return ResponseEntity.noContent().build();
+    // Get user tasks
+    @GetMapping("/{userId}/tasks")
+    public ResponseEntity<List<Task>> getUserTasks(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getUserTasks(userId));
     }
 
-    @GetMapping("/{id}/tasks")
-    public ResponseEntity<List<Task>> getUserTasks(@PathVariable Long id) {
-        List<Task> tasks = userService.getUserTasks(id);
-        return ResponseEntity.ok(tasks);
+    // Get user applied events
+    @GetMapping("/{userId}/applied-events")
+    public ResponseEntity<List<Event>> getUserAppliedEvents(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getUserAppliedEvents(userId));
     }
 
-    @GetMapping("/{id}/events")
-    public ResponseEntity<List<Event>> getUserEvents(@PathVariable Long id) {
-        List<Event> events = userService.getUserEvents(id);
-        return ResponseEntity.ok(events);
+    // Apply to event
+    @PostMapping("/{userId}/apply/{eventId}")
+    public ResponseEntity<Event> applyToEvent(@PathVariable Long userId, @PathVariable Long eventId) {
+        try {
+            Event event = userService.applyToEvent(userId, eventId);
+            return ResponseEntity.ok(event); // Return updated event with user participation
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null); // 400 Bad Request if user or event not found
+        }
     }
 }
