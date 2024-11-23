@@ -1,9 +1,9 @@
 package si.um.si.service;
 
-import si.um.si.model.Event;
-
 import java.util.List;
 import java.util.Optional;
+
+import si.um.si.model.Event;
 
 public interface EventService {
     List<Event> getAllEvents();
