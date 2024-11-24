@@ -23,8 +23,19 @@ export default function TaskList() {
 
   useEffect(() => {
     const fetchTasks = async () => {
+      const userId = localStorage.getItem("userId");
+
+      if (!userId) {
+        console.error("User ID is missing or the user is not logged in.");
+        setError("User not logged in.");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const response = await fetch("http://localhost:8080/api/tasks");
+        const response = await fetch(
+          `http://localhost:8080/api/users/${userId}/tasks`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch tasks");
         }

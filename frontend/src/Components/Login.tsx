@@ -23,7 +23,10 @@ const Login: React.FC<{
         }
       );
 
-      localStorage.setItem("user", JSON.stringify(response.data));
+      // Store only the user id in localStorage
+      const userId = response.data.id;
+      localStorage.setItem("userId", userId.toString());
+
       setIsAuthenticated(true);
       setError(null);
       navigate("/index");

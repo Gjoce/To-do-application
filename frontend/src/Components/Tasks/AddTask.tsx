@@ -16,12 +16,15 @@ function PopupForm({ isVisible, onClose }: PopupFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const userId = localStorage.getItem("userId");
+
     const newTask = {
       title,
       description,
       status,
       priority,
       dueDate,
+      userId,
     };
 
     try {
@@ -37,13 +40,14 @@ function PopupForm({ isVisible, onClose }: PopupFormProps) {
         throw new Error("Failed to create task");
       }
 
+      // Reset form fields after successful submission
       setTitle("");
       setDescription("");
       setStatus("PENDING");
       setPriority("LOW");
       setDueDate("");
 
-      onClose();
+      onClose(); // Close the popup
     } catch (error) {
       console.error("Error adding task:", error);
     }
@@ -60,9 +64,6 @@ function PopupForm({ isVisible, onClose }: PopupFormProps) {
       >
         <div className="popup-header">
           <h2>Add New Task</h2>
-          <button className="close-btn" onClick={onClose}>
-            X
-          </button>
         </div>
         <div className="popup-body">
           <form id="addTaskForm" onSubmit={handleSubmit}>
