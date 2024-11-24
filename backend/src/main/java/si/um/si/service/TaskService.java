@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import si.um.si.model.Task;
+import si.um.si.model.Users;
 import si.um.si.model.enums.Taskstatus;
 import si.um.si.repository.TaskRepository;
+import si.um.si.repository.UserRepository;
 
 @Service
 public class TaskService {
@@ -29,11 +31,28 @@ public class TaskService {
     public Optional<Task> getTaskById(Long id){
         return taskRepository.findById(id);
     }
+    @Autowired
+    private UserRepository userRepository;
+
 
     //Naredi novi task
-    public Task createTask(Task task) {
+    public Task createTask(Task task, Long userId) {
+        // Ensure userRepository is injected via dependency injection
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User with ID " + userId + " not found"));
+
+        if (task == null) {
+            throw new IllegalArgumentException("Task cannot be null");
+        }
+
+        // Assign the user to the task
+        task.setUser(user);
+        task.setCreatedBy(user);
+
+        // Save the task to the database
         return taskRepository.save(task);
     }
+
 
     //Pososdobi
     public Optional<Task> updateTask(long id, Task updatedTask) {

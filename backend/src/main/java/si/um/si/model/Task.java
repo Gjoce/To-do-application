@@ -128,4 +128,12 @@ public class Task {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
+    public void setCreatedBy(Users user) {
+        this.createdBy = user;
+    }
 }

@@ -28,13 +28,16 @@ function PopupForm({ isVisible, onClose }: PopupFormProps) {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/api/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newTask),
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/tasks?userId=${userId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newTask),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to create task");
