@@ -23,9 +23,11 @@ const Login: React.FC<{
         }
       );
 
-      // Store only the user id in localStorage
-      const userId = response.data.id;
+      const { id: userId, role } = response.data;
+
+      // Store userId and role in localStorage
       localStorage.setItem("userId", userId.toString());
+      localStorage.setItem("userRole", role);
 
       setIsAuthenticated(true);
       setError(null);

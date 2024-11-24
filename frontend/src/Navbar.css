@@ -15,7 +15,14 @@ nav {
 .nav--ul {
   list-style-type: none;
   margin-left: auto;
-  padding: 20px;
+  padding: 0;
+  display: flex; /* Add this */
+  gap: 10px; /* Add spacing between buttons */
+  align-items: center; /* Center vertically with the navigation bar */
+}
+
+.nav--ul li {
+  display: inline; /* Ensure list items don't stack */
 }
 
 .nav--h1 {
