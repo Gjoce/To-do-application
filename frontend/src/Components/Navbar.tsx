@@ -12,23 +12,29 @@ function NavigationBar({ onAddTaskClick }: NavigationBarProps) {
   };
 
   return (
-    <header>
-      <nav>
-        <h1 className="nav--h1">To-do List</h1>
-        <ul className="nav--ul">
-          <li>
-            <button className="add-task-btn" onClick={handleViewEvents}>
-              View Events
-            </button>
-          </li>
-          <li>
-            <button className="add-task-btn" onClick={onAddTaskClick}>
-              Add Task
-            </button>
-          </li>
-        </ul>
-      </nav>
-    </header>
+      <header>
+        <nav>
+          <h1 className="nav--h1">To-do List</h1>
+          <ul className="nav--ul">
+            <li>
+              <button className="add-task-btn" onClick={handleViewEvents}>
+                View Events
+              </button>
+            </li>
+            <li>
+              <button className="add-task-btn" onClick={onAddTaskClick}>
+                Add Task
+              </button>
+            </li>
+            {/* Add Add Event button */}
+            <li>
+              <button className="add-event-btn" onClick={onAddTaskClick}>
+                Add Event
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </header>
   );
 }
 
