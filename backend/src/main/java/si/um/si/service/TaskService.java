@@ -47,7 +47,7 @@ public class TaskService {
 
         // Assign the user to the task
         task.setUser(user);
-        task.setCreatedBy(user);
+
 
         // Save the task to the database
         return taskRepository.save(task);

@@ -26,18 +26,8 @@ public class Users {
     @Column(nullable = false)
     private Role role;
 
-    // Corrected relationship mappings
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Task> tasks = new ArrayList<>();  // Tasks that this user has created
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Task> assignedTasks = new ArrayList<>();  // Tasks assigned to this user
-
-    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Event> createdEvents = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "participants", fetch = FetchType.LAZY)
-    private List<Event> appliedEvents = new ArrayList<>();
 
     public Users() {}
 
@@ -89,27 +79,11 @@ public class Users {
         this.role = role;
     }
 
-    public List<Task> getTasks() {
-        return tasks;
+    public List<Task> getAssignedTasks() {
+        return assignedTasks;
     }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    public List<Event> getCreatedEvents() {
-        return createdEvents;
-    }
-
-    public void setCreatedEvents(List<Event> createdEvents) {
-        this.createdEvents = createdEvents;
-    }
-
-    public List<Event> getAppliedEvents() {
-        return appliedEvents;
-    }
-
-    public void setAppliedEvents(List<Event> appliedEvents) {
-        this.appliedEvents = appliedEvents;
+    public void setAssignedTasks(List<Task> assignedTasks) {
+        this.assignedTasks = assignedTasks;
     }
 }

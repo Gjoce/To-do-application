@@ -34,23 +34,19 @@ public class Task {
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", nullable = false)  // Corrected column name
-    private Users createdBy;  // User who created the task
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")  // Correct column name and referencedColumn
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)  // Correct column name and referencedColumn
     private Users user;  // User the task is assigned to
 
     public Task() {}
 
-    public Task(String title, String description, Taskstatus status, Taskpriority priority, LocalDateTime dueDate, Users createdBy) {
+    public Task(String title, String description, Taskstatus status, Taskpriority priority, LocalDateTime dueDate, Users user) {
         this.title = title;
         this.description = description;
         this.status = status;
         this.priority = priority;
         this.dueDate = dueDate;
         this.createdAt = LocalDateTime.now();
-        this.createdBy = createdBy;
+        this.user = user;
     }
 
     // Getters and Setters
@@ -129,11 +125,11 @@ public class Task {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void setUser(Users user) {
-        this.user = user;
+    public Users getUser() {
+        return user;
     }
 
-    public void setCreatedBy(Users user) {
-        this.createdBy = user;
+    public void setUser(Users user) {
+        this.user = user;
     }
 }
