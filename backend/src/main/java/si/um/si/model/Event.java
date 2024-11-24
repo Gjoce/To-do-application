@@ -1,9 +1,8 @@
 package si.um.si.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import si.um.si.model.Users;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +39,10 @@ public class Event {
     private int maxParticipants;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", nullable = false)
-    private Users createdBy;
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore // Add this annotation
+    private Users user;
+
 
     @ManyToMany
     @JoinTable(
@@ -56,14 +57,14 @@ public class Event {
 
     // Parameterized Constructor
     public Event(String name, String description, LocalDateTime startTime, LocalDateTime endTime,
-                 String location, int maxParticipants, Users createdBy) {
+                 String location, int maxParticipants, Users user) {
         this.name = name;
         this.description = description;
         this.startTime = startTime;
         this.endTime = endTime;
         this.location = location;
         this.maxParticipants = maxParticipants;
-        this.createdBy = createdBy;
+        this.user = user;
     }
 
     // Getters and Setters
@@ -123,12 +124,12 @@ public class Event {
         this.maxParticipants = maxParticipants;
     }
 
-    public Users getCreatedBy() {
-        return createdBy;
+    public Users getUser() {
+        return user;
     }
 
-    public void setCreatedBy(Users createdBy) {
-        this.createdBy = createdBy;
+    public void setUser(Users user) {
+        this.user = user;
     }
 
     public List<Users> getParticipants() {
@@ -137,5 +138,17 @@ public class Event {
 
     public void setParticipants(List<Users> participants) {
         this.participants = participants;
+    }
+
+    public void addParticipant(Users user) {
+        participants.add(user);
+    }
+
+    public void removeParticipant(Users user) {
+        participants.remove(user);
+    }
+
+    public void setCreatedBy(Users user) {
+        this.user = user;
     }
 }

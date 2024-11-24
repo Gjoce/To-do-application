@@ -13,7 +13,8 @@ import java.util.List;
 public interface EvenRepository extends JpaRepository<Event, Long> {
 
     // Find all events created by a specific user
-    List<Event> findByCreatedById(Long userId);
+    List<Event> findByUserId(Long userId);
+
 
     // Find all events a user is participating in
     List<Event> findByParticipantsId(Long userId);

@@ -110,7 +110,7 @@ public class EventService {
 
     // Get events created by a user
     public List<Event> getEventsCreatedByUser(Long userId) {
-        return eventRepository.findByCreatedById(userId);
+        return eventRepository.findByUserId(userId);
     }
 
     // Get events a user is participating in
