@@ -1,5 +1,6 @@
 package si.um.si.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import si.um.si.model.enums.*;
 
 import jakarta.persistence.*;
@@ -34,8 +35,9 @@ public class Task {
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)  // Correct column name and referencedColumn
-    private Users user;  // User the task is assigned to
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference  // Ignore this side during serialization
+    private Users user;
 
     public Task() {}
 

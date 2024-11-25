@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Index from "./Components/Tasks/Index";
-import EventList from "./Components/Tasks/Events/EventList";
+import EventList from "./Components/Tasks/Events/Index";
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);

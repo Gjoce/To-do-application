@@ -1,5 +1,6 @@
 package si.um.si.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import si.um.si.model.enums.Role;
 
@@ -26,8 +27,11 @@ public class Users {
     @Column(nullable = false)
     private Role role;
 
+    // Users class
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Task> assignedTasks = new ArrayList<>();  // Tasks assigned to this user
+    @JsonManagedReference  // Serialize this side
+    private List<Task> assignedTasks = new ArrayList<>();
+
 
     public Users() {}
 

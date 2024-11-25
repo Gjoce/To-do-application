@@ -52,9 +52,6 @@ const UpdateTaskPopup: React.FC<UpdateTaskPopupProps> = ({
       >
         <div className="popup-header">
           <h2>Update Task</h2>
-          <button className="close-btn" onClick={onClose}>
-            X
-          </button>
         </div>
         <div className="popup-body">
           <form onSubmit={handleSubmit}>
