@@ -530,14 +530,14 @@ Pošljite GET zahtevo na /tasks/status/{status}, kjer {status} predstavlja želj
 ### Implementirane funkcionalnosti za Controllers:
 Upravljanje dogodkov (EventController):
 
--Pridobivanje vseh dogodkov.
--Pridobivanje dogodka po ID-ju.
--Kreiranje novega dogodka (samo za administratorje).
--Posodabljanje obstoječega dogodka.
--Brisanje dogodka (samo za administratorje).
--Prikaz dogodkov, ki se bodo zgodili po določenem času.
--Prikaz dogodkov, ki jih je ustvaril določen uporabnik.
--Prikaz dogodkov, na katerih uporabnik sodeluje.
+-Pridobivanje vseh dogodkov: Funkcionalnost za pridobivanje vseh dogodkov, ki so shranjeni v sistemu.
+-Pridobivanje dogodka po ID-ju: Omogoča iskanje specifičnega dogodka z uporabo njegovega ID-ja.
+-Kreiranje novega dogodka (samo za administratorje): Omogoča administratorjem, da ustvarijo nove dogodke v sistemu. Uporabniki z drugimi vlogami nimajo dostopa do te funkcionalnosti.
+-Posodabljanje obstoječega dogodka: Omogoča posodabljanje podatkov obstoječih dogodkov, kot so ime, datum in opis.
+-Brisanje dogodka (samo za administratorje): Samo uporabniki z administratorskimi pravicami imajo možnost brisanja dogodkov iz sistema.
+-Prikaz dogodkov, ki se bodo zgodili po določenem času: Omogoča filtriranje dogodkov, ki so načrtovani za prihodnost, na podlagi določenega datuma.
+-Prikaz dogodkov, ki jih je ustvaril določen uporabnik: Omogoča iskanje dogodkov, ki so jih ustvarili določeni uporabniki.
+-Prikaz dogodkov, na katerih uporabnik sodeluje: Omogoča iskanje dogodkov, na katerih je določen uporabnik prijavljen kot udeleženec.
 
 Upravljanje nalog (TaskController):
 
