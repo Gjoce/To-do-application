@@ -1,3 +1,4 @@
+/* Popup Overlay Styles (Common for Update and Add) */
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -15,6 +16,7 @@
   display: flex;
 }
 
+/* Popup Form Styles (Common for Update and Add) */
 .popup-form {
   background-color: white;
   border-radius: 12px;

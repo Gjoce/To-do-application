@@ -1,32 +1,31 @@
 import React, { useEffect, useState } from "react";
-import EventList from "./EventLis";
-import Footer from "../../Footer";
-import NavigationBar from "./Navbar";
+import AddEvent from "./AddEvent";
+import EventList from "./EventList";
+import NavigationBar from "./Navbar.tsx";
+import Footer from "/src/components/Footer.tsx";
 
 export default function Index() {
-  const [isFormVisible, setIsFormVisible] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAddEventVisible, setIsAddEventVisible] = useState(false);
 
-  useEffect(() => {
-    // Fetch the userRole from localStorage
-    const userRole = localStorage.getItem("userRole");
-    setIsAdmin(userRole === "ADMIN"); // Update state based on userRole
-  }, []);
+    useEffect(() => {
+        // Check if the user is admin based on userRole stored in localStorage
+        const userRole = localStorage.getItem("userRole");
+        setIsAdmin(userRole === "ADMIN");
+    }, []);
 
-  const toggleFormVisibility = () => {
-    setIsFormVisible(!isFormVisible);
-  };
+    const toggleAddEventVisibility = () => {
+        setIsAddEventVisible(!isAddEventVisible);
+    };
 
-  return (
-    <>
-      {/* Pass the isAdmin prop to NavigationBar */}
-      <NavigationBar onAddTaskClick={toggleFormVisibility} isAdmin={isAdmin} />
-
-      <main className="container">
-        <EventList />
-      </main>
-
-      <Footer />
-    </>
-  );
+    return (
+        <>
+            <NavigationBar isAdmin={isAdmin} onAddTaskClick={toggleAddEventVisibility} />
+            <main className="container">
+                <AddEvent isAdmin={isAdmin} isVisible={isAddEventVisible} onClose={() => setIsAddEventVisible(false)} />
+                <EventList isAdmin={isAdmin} />
+            </main>
+            <Footer />
+        </>
+    );
 }

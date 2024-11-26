@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.*;
 import si.um.si.model.Event;
 import si.um.si.service.EventService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/events")
+@CrossOrigin(origins = "http://localhost:5173")
 public class EventController {
 
     private final EventService eventService;
@@ -23,11 +23,14 @@ public class EventController {
 
     // Get all events
     @GetMapping
-    public ResponseEntity<List<Event>> getAllEvents() {
+    public ResponseEntity<List<Event>> getAllEvents(@RequestParam(required = false) Long userId) {
+        if (userId != null) {
+            return ResponseEntity.ok(eventService.getEventsCreatedByUser(userId));
+        }
         return ResponseEntity.ok(eventService.getAllEvents());
     }
 
-    // Get event by ID
+    // Get a specific event by ID
     @GetMapping("/{eventId}")
     public ResponseEntity<Event> getEventById(@PathVariable Long eventId) {
         Optional<Event> event = eventService.getEventById(eventId);
@@ -48,7 +51,7 @@ public class EventController {
         }
     }
 
-    // Update an event
+    // Update an event (Admin only)
     @PutMapping("/{eventId}")
     public ResponseEntity<Event> updateEvent(
             @PathVariable Long eventId,
@@ -78,14 +81,7 @@ public class EventController {
         }
     }
 
-    // Get events by start time
-    @GetMapping("/upcoming")
-    public ResponseEntity<List<Event>> getUpcomingEvents(@RequestParam String startTime) {
-        LocalDateTime parsedTime = LocalDateTime.parse(startTime);
-        return ResponseEntity.ok(eventService.getEventsByStartTimeAfter(parsedTime));
-    }
-
-    // Get events created by a specific user
+    // Get events created by a user (Admin or User-specific)
     @GetMapping("/created-by/{userId}")
     public ResponseEntity<List<Event>> getEventsCreatedByUser(@PathVariable Long userId) {
         return ResponseEntity.ok(eventService.getEventsCreatedByUser(userId));

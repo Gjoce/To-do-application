@@ -8,7 +8,6 @@ import si.um.si.model.enums.Role;
 import si.um.si.repository.EvenRepository;
 import si.um.si.repository.UserRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,15 +35,8 @@ public class EventService {
 
     // Create a new event (Admin only)
     public Event createEvent(Event event, Long userId) {
-        Optional<Users> userOptional = userRepository.findById(userId);
+        Users user = getUserById(userId);
 
-        if (userOptional.isEmpty()) {
-            throw new IllegalArgumentException("User not found.");
-        }
-
-        Users user = userOptional.get();
-
-        // Check if the user has an admin role
         if (!user.getRole().equals(Role.ADMIN)) {
             throw new SecurityException("Only admins can create events.");
         }
@@ -53,22 +45,16 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    // Update an event
+    // Update an event (Admin only)
     public Optional<Event> updateEvent(Long eventId, Event updatedEvent, Long userId) {
-        Optional<Users> userOptional = userRepository.findById(userId);
+        Users user = getUserById(userId);
 
-        if (userOptional.isEmpty()) {
-            throw new IllegalArgumentException("User not found.");
+        if (!user.getRole().equals(Role.ADMIN)) {
+            throw new SecurityException("Only admins can update events.");
         }
-
-        Users user = userOptional.get();
 
         return eventRepository.findById(eventId)
                 .map(existingEvent -> {
-                    // Ensure that `getCreatedBy()` and `getId()` work correctly
-
-
-                    // Update fields
                     existingEvent.setName(updatedEvent.getName());
                     existingEvent.setDescription(updatedEvent.getDescription());
                     existingEvent.setStartTime(updatedEvent.getStartTime());
@@ -79,18 +65,10 @@ public class EventService {
                 });
     }
 
-
     // Delete an event (Admin only)
     public void deleteEvent(Long eventId, Long userId) {
-        Optional<Users> userOptional = userRepository.findById(userId);
+        Users user = getUserById(userId);
 
-        if (userOptional.isEmpty()) {
-            throw new IllegalArgumentException("User not found.");
-        }
-
-        Users user = userOptional.get();
-
-        // Check if the user has an admin role
         if (!user.getRole().equals(Role.ADMIN)) {
             throw new SecurityException("Only admins can delete events.");
         }
@@ -103,11 +81,6 @@ public class EventService {
         eventRepository.delete(eventOptional.get());
     }
 
-    // Get events by status (example functionality; you can adapt as needed)
-    public List<Event> getEventsByStartTimeAfter(LocalDateTime startTime) {
-        return eventRepository.findByStartTimeAfterOrderByStartTime(startTime);
-    }
-
     // Get events created by a user
     public List<Event> getEventsCreatedByUser(Long userId) {
         return eventRepository.findByUserId(userId);
@@ -116,5 +89,11 @@ public class EventService {
     // Get events a user is participating in
     public List<Event> getEventsUserIsParticipatingIn(Long userId) {
         return eventRepository.findByParticipantsId(userId);
+    }
+
+    // Helper method to get user by ID
+    private Users getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
     }
 }

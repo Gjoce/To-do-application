@@ -17,29 +17,32 @@ nav {
   margin-left: auto;
   padding: 0;
   display: flex; /* Add this */
-  gap: 10px; /* Add spacing between buttons */
+  gap: 30px; /* Add spacing between buttons */
   align-items: center; /* Center vertically with the navigation bar */
 }
 
 .nav--ul li {
-  display: inline; /* Ensure list items don't stack */
+  display: flex;
+  align-items: center;
+
 }
 
 .nav--h1 {
   font-weight: bold;
   font-size: 2rem;
   color: white;
+  margin-right: 40px;
 }
 
 /* Add Task Button */
 .add-task-btn {
-  padding: 10px 20px;
+  padding: 10px 25px;
   font-size: 1rem;
   font-weight: bold;
   color: #ffffff;
   background-color: #f05454;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   font-family: Poppins, sans-serif;
@@ -53,6 +56,18 @@ nav {
 
 .add-task-btn:focus {
   outline: none;
+}
+
+.add-task-btn {
+  background-color: red;
+}
+
+.add-task-btn:hover {
+  background-color: #ff7f7f;
+}
+
+.view-tasks-btn {
+  background-color: #4285f4;
 }
 
 /* Popup Overlay with transition */
@@ -146,4 +161,35 @@ nav {
 
 .btn-submit:hover {
   background-color: #61a091;
+}
+
+.logout-btn {
+  background-color: #e53935; /* Red color to signify logout */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 10px;
+}
+
+.logout-btn:hover {
+  background-color: #d32f2f;
+  /* Darker red on hover */
+}
+
+.back-to-tasks-btn {
+  background-color: #1976d2; /* Blue color for tasks button */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-right: 10px;
+}
+
+.back-to-tasks-btn:hover {
+  background-color: #1565c0; /* Darker blue on hover */
 }
