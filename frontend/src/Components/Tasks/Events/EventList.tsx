@@ -49,7 +49,6 @@ const EventList: React.FC<EventListProps> = ({ isAdmin }) => {
       });
       if (response.ok) {
         setEvents(events.filter((event) => event.id !== id));
-        alert("Event deleted successfully.");
       } else {
         alert("Failed to delete event.");
       }
