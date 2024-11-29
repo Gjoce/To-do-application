@@ -25,13 +25,10 @@ const EventList: React.FC<EventListProps> = ({ isAdmin }) => {
   const [selectedEvent, setSelectedEvent] = useState<EventProps | null>(null);
   const navigate = useNavigate();
 
-  // Fetch events
   const fetchEvents = async () => {
     try {
       const response = await fetch("http://localhost:8080/events");
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
       const data: EventProps[] = await response.json();
       setEvents(data);
     } catch (err) {
@@ -40,7 +37,6 @@ const EventList: React.FC<EventListProps> = ({ isAdmin }) => {
     }
   };
 
-  // Delete an event (Admin Only)
   const deleteEvent = async (id: number) => {
     const userId = localStorage.getItem("userId");
     try {
@@ -61,13 +57,11 @@ const EventList: React.FC<EventListProps> = ({ isAdmin }) => {
     navigate("/index");
   };
 
-  // Show update popup
   const showUpdatePopup = (event: EventProps) => {
     setSelectedEvent(event);
     setIsUpdatePopupVisible(true);
   };
 
-  // Handle update event
   const handleUpdateEvent = async (updatedEvent: EventProps) => {
     const userId = localStorage.getItem("userId");
     try {

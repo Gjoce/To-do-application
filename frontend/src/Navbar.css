@@ -193,3 +193,60 @@ nav {
 .back-to-tasks-btn:hover {
   background-color: #1565c0; /* Darker blue on hover */
 }
+
+/* Apply Event Button */
+.apply-event-btn {
+  background-color: #4caf50; /* Green for apply */
+  color: white;
+  padding: 10px 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  font-family: Poppins, sans-serif;
+}
+
+.apply-event-btn:hover {
+  background-color: #45a049; /* Darker green on hover */
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.apply-event-btn:focus {
+  outline: none;
+}
+
+/* Applicants Popup */
+.applicants-list {
+  margin-top: 16px;
+  list-style-type: none;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  border-top: 1px solid #ced4da;
+}
+
+.applicants-list-item {
+  padding: 10px;
+  border-bottom: 1px solid #ced4da;
+}
+
+.applicants-list-item:last-child {
+  border-bottom: none;
+}
+
+.applicants-list-item span {
+  font-weight: bold;
+  color: #333;
+}
+
+.popup-header h2 {
+  font-size: 1.5rem;
+  color: #142d4c; /* Matching nav background */
+}
+
+.close-btn {
+  color: #f05454; /* Matching the primary color scheme */
+}

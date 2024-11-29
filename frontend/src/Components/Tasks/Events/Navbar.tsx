@@ -13,6 +13,10 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onAddTaskClick, isAdmin }
     navigate("/events");
   };
 
+  const handleApplyEvent = () => {
+    navigate("/apply-event");
+  }
+
   const handleLogout = () => {
     // Clear localStorage data
     localStorage.clear(); // Clear all user-related data
@@ -39,9 +43,14 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onAddTaskClick, isAdmin }
                     </button>
                   </>
               ) : (
-                  <button className="add-task-btn" onClick={handleViewEvents}>
-                    View My Events
-                  </button>
+                  <>
+                    <button className="add-task-btn" onClick={handleViewEvents}>
+                      View My Events
+                    </button>
+                    <button className="add-task-btn" onClick={handleApplyEvent}>
+                      Apply to Event
+                    </button>
+                  </>
               )}
             </li>
             <li>

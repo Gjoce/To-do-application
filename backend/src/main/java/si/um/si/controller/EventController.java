@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import si.um.si.model.Event;
+import si.um.si.model.Users;
+import si.um.si.repository.EvenRepository;
 import si.um.si.service.EventService;
 
 import java.util.List;
@@ -92,4 +94,12 @@ public class EventController {
     public ResponseEntity<List<Event>> getEventsUserIsParticipatingIn(@PathVariable Long userId) {
         return ResponseEntity.ok(eventService.getEventsUserIsParticipatingIn(userId));
     }
+
+    @GetMapping("/events/{eventId}/applicants")
+    public ResponseEntity<List<Users>> getEventApplicants(@PathVariable Long eventId) {
+        Event event = eventService.getEventById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+        return ResponseEntity.ok(event.getParticipants());
+    }
+
 }
