@@ -1,4 +1,4 @@
-package unit_tests;
+package si.um.si.unit_tests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +12,7 @@ import si.um.si.model.enums.Taskpriority;
 import si.um.si.model.enums.Taskstatus;
 import si.um.si.repository.TaskRepository;
 import si.um.si.repository.UserRepository;
+import si.um.si.service.TaskService;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -36,21 +37,23 @@ class Add_task {
     }
 
     @Test
-    @DisplayName("User Registration Test")  // Intentionally using this for the add task functionality
+    @DisplayName("Create Task - User Exists (Positive Scenario)")
     void createTask_shouldCreateTaskWhenUserExists() {
         // Arrange
-        Long userId = 1L;
+        Long userId = 25L;
         Users user = new Users();
         user.setId(userId);
-        user.setName("Test User");
+        user.setUsername("Test User");
+        user.setEmail("test@example.com");
 
         Task newTask = new Task();
         newTask.setTitle("Test Task");
         newTask.setDescription("Test Description");
-        newTask.setStatus(Taskstatus.TODO);
+        newTask.setStatus(Taskstatus.PENDING);
         newTask.setPriority(Taskpriority.HIGH);
         newTask.setDueDate(LocalDateTime.now().plusDays(1));
 
+        // Mock repository behavior
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(taskRepository.save(any(Task.class))).thenAnswer(invocation -> {
             Task savedTask = invocation.getArgument(0);
@@ -66,16 +69,17 @@ class Add_task {
         assertEquals(1L, createdTask.getId());
         assertEquals("Test Task", createdTask.getTitle());
         assertEquals("Test Description", createdTask.getDescription());
-        assertEquals(Taskstatus.TODO, createdTask.getStatus());
+        assertEquals(Taskstatus.PENDING, createdTask.getStatus());
         assertEquals(Taskpriority.HIGH, createdTask.getPriority());
         assertEquals(user, createdTask.getUser());
 
+        // Verify repository method calls
         verify(userRepository, times(1)).findById(userId);
         verify(taskRepository, times(1)).save(newTask);
     }
 
     @Test
-    @DisplayName("User Registration Test - User Not Found")
+    @DisplayName("Create Task - User Not Found (Negative Scenario)")
     void createTask_shouldThrowExceptionWhenUserNotFound() {
         // Arrange
         Long userId = 1L;
@@ -91,6 +95,24 @@ class Add_task {
         );
 
         assertEquals("User with ID " + userId + " not found", exception.getMessage());
+        verify(userRepository, times(1)).findById(userId);
+        verify(taskRepository, never()).save(any(Task.class));
+    }
+
+    @Test
+    @DisplayName("Create Task - Task is Null (Negative Scenario)")
+    void createTask_shouldThrowExceptionWhenTaskIsNull() {
+        // Arrange
+        Long userId = 1L;
+        when(userRepository.findById(userId)).thenReturn(Optional.of(new Users()));
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> taskService.createTask(null, userId)
+        );
+
+        assertEquals("Task cannot be null", exception.getMessage());
         verify(userRepository, times(1)).findById(userId);
         verify(taskRepository, never()).save(any(Task.class));
     }

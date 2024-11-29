@@ -1,4 +1,4 @@
-package unit_tests;
+package si.um.si.unit_tests;
 
 public class View_events_user {
 }

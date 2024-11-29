@@ -16,28 +16,23 @@ import si.um.si.repository.UserRepository;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, UserRepository userRepository) {
         this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
-    //Prejmi vse taske
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
     }
 
-    //Najdi po Id task
-    public Optional<Task> getTaskById(Long id){
+    public Optional<Task> getTaskById(Long id) {
         return taskRepository.findById(id);
     }
-    @Autowired
-    private UserRepository userRepository;
 
-
-    //Naredi novi task
     public Task createTask(Task task, Long userId) {
-        // Ensure userRepository is injected via dependency injection
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with ID " + userId + " not found"));
 
@@ -45,16 +40,10 @@ public class TaskService {
             throw new IllegalArgumentException("Task cannot be null");
         }
 
-        // Assign the user to the task
         task.setUser(user);
-
-
-        // Save the task to the database
         return taskRepository.save(task);
     }
 
-
-    //Pososdobi
     public Optional<Task> updateTask(long id, Task updatedTask) {
         return taskRepository.findById(id)
                 .map(existingTask -> {
@@ -72,7 +61,6 @@ public class TaskService {
     }
 
     public List<Task> getTasksByStatus(Taskstatus status) {
-        return taskRepository.findByStatus(status); // Fetch tasks by status
+        return taskRepository.findByStatus(status);
     }
-
 }
