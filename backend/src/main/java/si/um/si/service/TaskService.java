@@ -40,9 +40,15 @@ public class TaskService {
             throw new IllegalArgumentException("Task cannot be null");
         }
 
+        // Add validation for the user data here
+        if (user.getUsername() == null || user.getUsername().isEmpty()) {
+            throw new IllegalArgumentException("User data is incomplete or invalid");
+        }
+
         task.setUser(user);
         return taskRepository.save(task);
     }
+
 
     public Optional<Task> updateTask(long id, Task updatedTask) {
         return taskRepository.findById(id)

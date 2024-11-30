@@ -116,4 +116,34 @@ class Add_task {
         verify(userRepository, times(1)).findById(userId);
         verify(taskRepository, never()).save(any(Task.class));
     }
+
+    @Test
+    @DisplayName("Create Task - User Data Invalid (Negative Scenario)")
+    void createTask_shouldThrowExceptionWhenUserDataIsInvalid() {
+        Long userId = 2L;
+        Users invalidUser = new Users();
+        invalidUser.setId(userId);
+        invalidUser.setUsername(null); // Invalid data (null username)
+        invalidUser.setEmail("invalid@example.com");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(invalidUser));
+
+        Task newTask = new Task();
+        newTask.setTitle("Test Task");
+        newTask.setDescription("Test Description");
+        newTask.setStatus(Taskstatus.PENDING);
+        newTask.setPriority(Taskpriority.HIGH);
+        newTask.setDueDate(LocalDateTime.now().plusDays(1));
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> taskService.createTask(newTask, userId)
+        );
+
+        assertEquals("User data is incomplete or invalid", exception.getMessage());
+        verify(userRepository, times(1)).findById(userId);
+        verify(taskRepository, never()).save(any(Task.class));
+    }
+
 }

@@ -95,7 +95,7 @@ class Delete_event {
         when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
         when(eventRepository.findById(1L)).thenReturn(Optional.empty());
 
-        // Act & Assert
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             eventService.deleteEvent(1L, 1L);
         });

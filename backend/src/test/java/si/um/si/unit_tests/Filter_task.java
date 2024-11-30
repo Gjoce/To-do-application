@@ -82,4 +82,22 @@ class Filter_task {
         // Verify the interaction with the repository
         verify(taskRepository, times(1)).findByStatus(Taskstatus.RUNNING);
     }
+
+    @RepeatedTest(3)
+    @DisplayName("Get Tasks By Status - Negative Scenario (Exception Handling)")
+    void getTasksByStatus_shouldThrowExceptionWhenRepositoryFails() {
+        // Arrange
+        when(taskRepository.findByStatus(Taskstatus.PENDING))
+                .thenThrow(new RuntimeException("Database error"));
+
+        // Act & Assert
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            taskService.getTasksByStatus(Taskstatus.PENDING);
+        });
+
+        assertEquals("Database error", exception.getMessage(), "Exception message should match the expected");
+
+        // Verify the interaction with the repository
+        verify(taskRepository, times(1)).findByStatus(Taskstatus.PENDING);
+    }
 }

@@ -11,6 +11,8 @@ import si.um.si.repository.EvenRepository;
 import si.um.si.repository.UserRepository;
 import si.um.si.service.EventService;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -33,20 +35,28 @@ class Add_event {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        initializeTestData();
+    }
 
-        // Initialize test data
-        adminUser = new Users();
-        adminUser.setId(1L);
-        adminUser.setRole(Role.ADMIN);
+    private void initializeTestData() {
+        adminUser = createUser(1L, Role.ADMIN);
+        regularUser = createUser(2L, Role.USER);
+        mockEvent = createEvent(1L, "Test Event", "A test event");
+    }
 
-        regularUser = new Users();
-        regularUser.setId(2L);
-        regularUser.setRole(Role.USER);
+    private Users createUser(Long id, Role role) {
+        Users user = new Users();
+        user.setId(id);
+        user.setRole(role);
+        return user;
+    }
 
-        mockEvent = new Event();
-        mockEvent.setId(1L);
-        mockEvent.setName("Test Event");
-        mockEvent.setDescription("A test event");
+    private Event createEvent(Long id, String name, String description) {
+        Event event = new Event();
+        event.setId(id);
+        event.setName(name);
+        event.setDescription(description);
+        return event;
     }
 
     @Test
@@ -54,7 +64,7 @@ class Add_event {
     @DisplayName("Create Event - Admin User")
     void createEvent_shouldCreateEventWhenUserIsAdmin() {
         // Arrange
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(adminUser));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
         when(eventRepository.save(mockEvent)).thenReturn(mockEvent);
 
         // Act
@@ -72,7 +82,7 @@ class Add_event {
     @DisplayName("Create Event - Non-Admin User")
     void createEvent_shouldThrowExceptionWhenUserIsNotAdmin() {
         // Arrange
-        when(userRepository.findById(2L)).thenReturn(java.util.Optional.of(regularUser));
+        when(userRepository.findById(2L)).thenReturn(Optional.of(regularUser));
 
         // Act & Assert
         SecurityException exception = assertThrows(SecurityException.class, () -> {
@@ -81,6 +91,23 @@ class Add_event {
 
         assertEquals("Only admins can create events.", exception.getMessage(), "The exception message should match.");
         verify(userRepository, times(1)).findById(2L);
+        verify(eventRepository, never()).save(any(Event.class));
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("Create Event - User Not Found")
+    void createEvent_shouldThrowExceptionWhenUserNotFound() {
+        // Arrange
+        when(userRepository.findById(3L)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            eventService.createEvent(mockEvent, 3L);
+        });
+
+        assertEquals("User not found.", exception.getMessage(), "The exception message should match.");
+        verify(userRepository, times(1)).findById(3L);
         verify(eventRepository, never()).save(any(Event.class));
     }
 }
