@@ -29,7 +29,6 @@ public class UsersService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     public Users registerUser(String username, String email, String password) {
         if (usersRepository.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException("Email is already in use.");
@@ -39,7 +38,6 @@ public class UsersService {
         return usersRepository.save(user);
     }
 
-
     public Optional<Users> loginUser(String email, String password) {
         Optional<Users> user = usersRepository.findByEmail(email);
         if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
@@ -48,22 +46,20 @@ public class UsersService {
         return Optional.empty();
     }
 
-
     public List<Task> getUserTasks(Long userId) {
         Optional<Users> user = usersRepository.findById(userId);
         if (user.isPresent()) {
             return taskRepository.findByUserId(userId);
         }
-        return null;
+        throw new IllegalArgumentException("User not found");
     }
-
 
     public List<Event> getUserAppliedEvents(Long userId) {
         Optional<Users> user = usersRepository.findById(userId);
         if (user.isPresent()) {
             return eventRepository.findByParticipantsContaining(user.get());
         }
-        return null;
+        throw new IllegalArgumentException("User not found");
     }
 
     // Apply to event
@@ -81,7 +77,6 @@ public class UsersService {
 
         return event;
     }
-
 
     public Optional<Users> getUserById(long userId) {
         return usersRepository.findById(userId);

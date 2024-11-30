@@ -1,19 +1,25 @@
 package si.um.si.unit_tests; // Package statement
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import static org.junit.jupiter.api.Assertions.*;
 
 class Registration {
 
-    // Simplified method to handle user registration
+    // Using BCryptPasswordEncoder to simulate password encoding
     boolean register(String username, String password, String email) {
-        // Simplified return logic using a single expression
+        // Simulate password encoding
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(password);
+
+        // Here, you can check if the password is encoded, not just the fields
         return username != null && !username.isEmpty() &&
                 password != null && !password.isEmpty() &&
-                email != null && email.contains("@");
+                email != null && email.contains("@") && encodedPassword != null;
     }
-        @Test
-    @DisplayName("User Registration Test")
+
+    @Test
+    @DisplayName("User Registration Test with Password Encoding")
     void testUserRegistration() {
         // Arrange: Set up test data and expected outcomes
         String username = "testUser";
