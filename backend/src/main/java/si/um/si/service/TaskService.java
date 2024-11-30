@@ -57,8 +57,12 @@ public class TaskService {
     }
 
     public void deleteTask(Long id) {
+        if (!taskRepository.existsById(id)) {
+            throw new IllegalArgumentException("Task with ID " + id + " not found");
+        }
         taskRepository.deleteById(id);
     }
+
 
     public List<Task> getTasksByStatus(Taskstatus status) {
         return taskRepository.findByStatus(status);
