@@ -6,7 +6,10 @@ interface NavigationBarProps {
   isAdmin: boolean;
 }
 
-const NavigationBar: React.FC<NavigationBarProps> = ({ onAddTaskClick, isAdmin }) => {
+const NavigationBar: React.FC<NavigationBarProps> = ({
+  onAddTaskClick,
+  isAdmin,
+}) => {
   const navigate = useNavigate();
 
   const handleViewEvents = () => {
@@ -15,7 +18,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onAddTaskClick, isAdmin }
 
   const handleApplyEvent = () => {
     navigate("/apply-event");
-  }
+  };
 
   const handleLogout = () => {
     // Clear localStorage data
@@ -28,39 +31,41 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ onAddTaskClick, isAdmin }
   };
 
   return (
-      <header>
-        <nav>
-          <h1 className="nav--h1">To-do List</h1>
-          <ul className="nav--ul">
-            <li>
-              {isAdmin ? (
-                  <>
-                    <button className="add-task-btn" onClick={onAddTaskClick}>
-                      Add Event
-                    </button>
-                    <button className="add-task-btn" onClick={handleViewEvents}>
-                      View My Events
-                    </button>
-                  </>
-              ) : (
-                  <>
-                    <button className="add-task-btn" onClick={handleViewEvents}>
-                      View My Events
-                    </button>
-                    <button className="add-task-btn" onClick={handleApplyEvent}>
-                      Apply to Event
-                    </button>
-                  </>
-              )}
-            </li>
-            <li>
-              <button className="logout-btn" onClick={handleLogout}>
-                Logout
-              </button>
-            </li>
-          </ul>
-        </nav>
-      </header>
+    <header>
+      <nav>
+        <h1 className="nav--h1">To-do List</h1>
+        <ul className="nav--ul">
+          {isAdmin ? (
+            <>
+              <li>
+                <button className="add-task-btn" onClick={onAddTaskClick}>
+                  Add Event
+                </button>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <button className="add-task-btn" onClick={handleViewEvents}>
+                  View My Events
+                </button>
+              </li>
+              <li>
+                <button className="add-task-btn" onClick={handleApplyEvent}>
+                  Apply to Event
+                </button>
+              </li>
+            </>
+          )}
+
+          <li>
+            <button className="add-task-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </header>
   );
 };
 

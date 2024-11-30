@@ -10,6 +10,15 @@ function NavigationBar({ onAddTaskClick }: NavigationBarProps) {
   const handleViewEvents = () => {
     navigate("/events");
   };
+  const handleLogout = () => {
+    // Clear localStorage data
+    localStorage.clear(); // Clear all user-related data
+    // Redirect to login page
+    navigate("/index", { replace: true });
+    setTimeout(() => {
+      window.location.href = "/index";
+    }, 0);
+  };
 
   return (
     <header>
@@ -24,6 +33,11 @@ function NavigationBar({ onAddTaskClick }: NavigationBarProps) {
           <li>
             <button className="add-task-btn" onClick={onAddTaskClick}>
               Add Task
+            </button>
+          </li>
+          <li>
+            <button className="add-task-btn" onClick={handleLogout}>
+              Logout
             </button>
           </li>
         </ul>
