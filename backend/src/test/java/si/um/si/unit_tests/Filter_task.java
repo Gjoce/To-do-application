@@ -3,7 +3,6 @@ package si.um.si.unit_tests;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.TestInstance;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -15,12 +14,12 @@ import si.um.si.service.TaskService;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class Filter_task {
 
     @Mock
@@ -34,23 +33,22 @@ class Filter_task {
         MockitoAnnotations.openMocks(this);
     }
 
+    private Task createMockTask(String title, String description, Taskstatus status, Taskpriority priority, int daysUntilDue) {
+        Task task = new Task();
+        task.setTitle(title);
+        task.setDescription(description);
+        task.setStatus(status);
+        task.setPriority(priority);
+        task.setDueDate(LocalDateTime.now().plusDays(daysUntilDue));
+        return task;
+    }
+
     @RepeatedTest(3)
     @DisplayName("Get Tasks By Status - Positive Scenario")
     void getTasksByStatus_shouldReturnTasksWhenStatusExists() {
         // Arrange
-        Task task1 = new Task();
-        task1.setTitle("Task 1");
-        task1.setDescription("Description 1");
-        task1.setStatus(Taskstatus.PENDING);
-        task1.setPriority(Taskpriority.HIGH);
-        task1.setDueDate(LocalDateTime.now().plusDays(1));
-
-        Task task2 = new Task();
-        task2.setTitle("Task 2");
-        task2.setDescription("Description 2");
-        task2.setStatus(Taskstatus.PENDING);
-        task2.setPriority(Taskpriority.LOW);
-        task2.setDueDate(LocalDateTime.now().plusDays(2));
+        Task task1 = createMockTask("Task 1", "Description 1", Taskstatus.PENDING, Taskpriority.HIGH, 1);
+        Task task2 = createMockTask("Task 2", "Description 2", Taskstatus.PENDING, Taskpriority.LOW, 2);
 
         // Mock repository behavior
         when(taskRepository.findByStatus(Taskstatus.PENDING)).thenReturn(Arrays.asList(task1, task2));
@@ -59,10 +57,10 @@ class Filter_task {
         List<Task> tasks = taskService.getTasksByStatus(Taskstatus.PENDING);
 
         // Assert
-        assertNotNull(tasks);
-        assertEquals(2, tasks.size());
-        assertTrue(tasks.contains(task1));
-        assertTrue(tasks.contains(task2));
+        assertNotNull(tasks, "Tasks list should not be null");
+        assertEquals(2, tasks.size(), "Tasks list size should be 2");
+        assertTrue(tasks.contains(task1), "Tasks list should contain task1");
+        assertTrue(tasks.contains(task2), "Tasks list should contain task2");
 
         // Verify the interaction with the repository
         verify(taskRepository, times(1)).findByStatus(Taskstatus.PENDING);
@@ -72,14 +70,14 @@ class Filter_task {
     @DisplayName("Get Tasks By Status - No Tasks Found Scenario")
     void getTasksByStatus_shouldReturnEmptyListWhenNoTasksFound() {
         // Arrange
-        when(taskRepository.findByStatus(Taskstatus.RUNNING)).thenReturn(Arrays.asList());
+        when(taskRepository.findByStatus(Taskstatus.RUNNING)).thenReturn(Collections.emptyList());
 
         // Act
         List<Task> tasks = taskService.getTasksByStatus(Taskstatus.RUNNING);
 
         // Assert
-        assertNotNull(tasks);
-        assertTrue(tasks.isEmpty());
+        assertNotNull(tasks, "Tasks list should not be null");
+        assertTrue(tasks.isEmpty(), "Tasks list should be empty");
 
         // Verify the interaction with the repository
         verify(taskRepository, times(1)).findByStatus(Taskstatus.RUNNING);
