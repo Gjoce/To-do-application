@@ -1,11 +1,11 @@
 package si.um.si.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import si.um.si.model.Event;
 import si.um.si.model.Users;
-import si.um.si.repository.EvenRepository;
 import si.um.si.service.EventService;
 
 import java.util.List;
@@ -23,21 +23,10 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    // Get all events
+    // Get all events (admin and user)
     @GetMapping
-    public ResponseEntity<List<Event>> getAllEvents(@RequestParam(required = false) Long userId) {
-        if (userId != null) {
-            return ResponseEntity.ok(eventService.getEventsCreatedByUser(userId));
-        }
-        return ResponseEntity.ok(eventService.getAllEvents());
-    }
-
-    // Get a specific event by ID
-    @GetMapping("/{eventId}")
-    public ResponseEntity<Event> getEventById(@PathVariable Long eventId) {
-        Optional<Event> event = eventService.getEventById(eventId);
-        return event.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public List<Event> getAllEvents() {
+        return eventService.getAllEvents(); //ensure participants are fetched as wel
     }
 
     // Create a new event (Admin only)
@@ -47,9 +36,7 @@ public class EventController {
             Event createdEvent = eventService.createEvent(event, userId);
             return ResponseEntity.ok(createdEvent);
         } catch (SecurityException e) {
-            return ResponseEntity.status(403).body(null); // Forbidden
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(403).body(null);
         }
     }
 
@@ -64,9 +51,9 @@ public class EventController {
             return updated.map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
         } catch (SecurityException e) {
-            return ResponseEntity.status(403).body(null); // Forbidden
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.status(403).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
         }
     }
 
@@ -75,31 +62,41 @@ public class EventController {
     public ResponseEntity<Void> deleteEvent(@PathVariable Long eventId, @RequestParam Long userId) {
         try {
             eventService.deleteEvent(eventId, userId);
-            return ResponseEntity.noContent().build(); // Success, no content
+            return ResponseEntity.noContent().build();
         } catch (SecurityException e) {
-            return ResponseEntity.status(403).build(); // Forbidden
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(403).build();
         }
     }
 
-    // Get events created by a user (Admin or User-specific)
-    @GetMapping("/created-by/{userId}")
-    public ResponseEntity<List<Event>> getEventsCreatedByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(eventService.getEventsCreatedByUser(userId));
+    // Apply to an event
+    @PostMapping("/{eventId}/apply")
+    public ResponseEntity<Event> applyToEvent(@PathVariable Long eventId, @RequestParam Long userId) {
+        try {
+            Event event = eventService.applyToEvent(eventId, userId);
+            return ResponseEntity.ok(event);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
-    // Get events a user is participating in
-    @GetMapping("/participating/{userId}")
-    public ResponseEntity<List<Event>> getEventsUserIsParticipatingIn(@PathVariable Long userId) {
-        return ResponseEntity.ok(eventService.getEventsUserIsParticipatingIn(userId));
+    // View participants of an event (Admin only)
+    @GetMapping("/{eventId}/participants")
+    public ResponseEntity<List<Users>> getParticipants(@PathVariable Long eventId, @RequestParam Long userId) {
+        try {
+            List<Users> participants = eventService.getParticipants(eventId, userId);
+            return ResponseEntity.ok(participants);
+        } catch (SecurityException e) {
+            return ResponseEntity.status(403).build();
+        }
     }
-
-    @GetMapping("/events/{eventId}/applicants")
-    public ResponseEntity<List<Users>> getEventApplicants(@PathVariable Long eventId) {
-        Event event = eventService.getEventById(eventId)
-                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
-        return ResponseEntity.ok(event.getParticipants());
+    @GetMapping("/users/{userId}/events")
+    public ResponseEntity<List<Event>> getUserAppliedEvents(@PathVariable Long userId) {
+        try {
+            List<Event> userEvents = eventService.getUserAppliedEvents(userId);
+            return ResponseEntity.ok(userEvents);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 }

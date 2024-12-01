@@ -28,9 +28,18 @@ public class EventService {
         return eventRepository.findAll();
     }
 
-    // Get event by ID
-    public Optional<Event> getEventById(Long id) {
-        return eventRepository.findById(id);
+    // Apply to an event
+    public Event applyToEvent(Long eventId, Long userId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found."));
+        Users user = getUserById(userId);
+
+        if (event.getParticipants().size() >= event.getMaxParticipants()) {
+            throw new IllegalStateException("Event is fully booked.");
+        }
+
+        event.getParticipants().add(user); // Add the user to the participants
+        return eventRepository.save(event);
     }
 
     // Create a new event (Admin only)
@@ -41,7 +50,7 @@ public class EventService {
             throw new SecurityException("Only admins can create events.");
         }
 
-        event.setCreatedBy(user); // Set the user as the event creator
+        event.setCreatedBy(user);
         return eventRepository.save(event);
     }
 
@@ -73,22 +82,24 @@ public class EventService {
             throw new SecurityException("Only admins can delete events.");
         }
 
-        Optional<Event> eventOptional = eventRepository.findById(eventId);
-        if (eventOptional.isEmpty()) {
-            throw new IllegalArgumentException("Event not found.");
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found."));
+
+        eventRepository.delete(event);
+    }
+
+    // Get participants of an event (Admin only)
+    public List<Users> getParticipants(Long eventId, Long userId) {
+        Users user = getUserById(userId);
+
+        if (!user.getRole().equals(Role.ADMIN)) {
+            throw new SecurityException("Only admins can view participants.");
         }
 
-        eventRepository.delete(eventOptional.get());
-    }
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found."));
 
-    // Get events created by a user
-    public List<Event> getEventsCreatedByUser(Long userId) {
-        return eventRepository.findByUserId(userId);
-    }
-
-    // Get events a user is participating in
-    public List<Event> getEventsUserIsParticipatingIn(Long userId) {
-        return eventRepository.findByParticipantsId(userId);
+        return event.getParticipants();
     }
 
     // Helper method to get user by ID
@@ -96,4 +107,11 @@ public class EventService {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found."));
     }
+
+    public List<Event> getUserAppliedEvents(Long userId) {
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+        return eventRepository.findByParticipantsContaining(user); // Assuming a ManyToMany relationship
+    }
+
 }

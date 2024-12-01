@@ -32,6 +32,9 @@ public class Users {
     @JsonManagedReference  // Serialize this side
     private List<Task> assignedTasks = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "participants")
+    private List<Event> appliedEvents = new ArrayList<>();
+
 
     public Users() {}
 
@@ -89,5 +92,9 @@ public class Users {
 
     public void setAssignedTasks(List<Task> assignedTasks) {
         this.assignedTasks = assignedTasks;
+    }
+
+    public List<Event> getAppliedEvents() {
+        return appliedEvents;
     }
 }

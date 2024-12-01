@@ -1,0 +1,6 @@
+###
+PUT http://localhost:8080/events/{{eventId}}?
+    userId={{$random.integer(100)}}
+    Content-Type: application/json
+
+###

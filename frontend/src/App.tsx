@@ -4,7 +4,8 @@ import Login from "./Components/Login";
 import Register from "./Components/Register";
 import Index from "./Components/Tasks/Index";
 import EventList from "./Components/Tasks/Events/Index";
-import ApplyEvent  from "./Components/Tasks/Events/ApplyEvents"
+import ApplyEvent  from "./Components/Tasks/Events/ApplyEvent.tsx"
+import UserEvents from "./Components/Tasks/Events/UserEvents.tsx";
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -34,6 +35,8 @@ const App: React.FC = () => {
         />
         <Route path="/events" element={<EventList />} />
         <Route path="/apply-event" element={<ApplyEvent />} />
+          <Route path="/user-events/:userId" element={<UserEvents />} />
+
           {/* New Route */}
       </Routes>
     </Router>

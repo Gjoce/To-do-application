@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Event from "./Event";
 import UpdateEventPopup from "./UpdateEvent";
 import "../../../EventList.css";
-import { useNavigate } from "react-router-dom";
+import "../../../Event.css";
 
 interface EventProps {
   id: number;
@@ -12,6 +12,13 @@ interface EventProps {
   endTime: string;
   location: string;
   maxParticipants: number;
+  currentParticipants: number;
+  applied?: boolean;
+}
+
+interface Applicant {
+  name: string;
+  email: string;
 }
 
 interface EventListProps {
@@ -20,20 +27,19 @@ interface EventListProps {
 
 const EventList: React.FC<EventListProps> = ({ isAdmin }) => {
   const [events, setEvents] = useState<EventProps[]>([]);
-  const [error, setError] = useState("");
-  const [isUpdatePopupVisible, setIsUpdatePopupVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<EventProps | null>(null);
-  const navigate = useNavigate();
+  const [isUpdatePopupVisible, setIsUpdatePopupVisible] = useState(false);
+  const [applicants, setApplicants] = useState<Applicant[]>([]);
+  const [showApplicantsPopup, setShowApplicantsPopup] = useState(false);
 
   const fetchEvents = async () => {
     try {
       const response = await fetch("http://localhost:8080/events");
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      if (!response.ok) throw new Error("Failed to fetch events");
       const data: EventProps[] = await response.json();
       setEvents(data);
     } catch (err) {
       console.error("Error fetching events:", err);
-      setError("Failed to fetch events.");
     }
   };
 
@@ -43,55 +49,73 @@ const EventList: React.FC<EventListProps> = ({ isAdmin }) => {
       const response = await fetch(`http://localhost:8080/events/${id}?userId=${userId}`, {
         method: "DELETE",
       });
-      if (response.ok) {
-        setEvents(events.filter((event) => event.id !== id));
-      } else {
-        alert("Failed to delete event.");
-      }
+      if (!response.ok) throw new Error("Failed to delete event.");
+      setEvents(events.filter((event) => event.id !== id));
     } catch (err) {
       console.error("Error deleting event:", err);
+      alert("Failed to delete event.");
     }
   };
 
-  const handleBackToTasks = () => {
-    navigate("/index");
-  };
-
-  const showUpdatePopup = (event: EventProps) => {
-    setSelectedEvent(event);
-    setIsUpdatePopupVisible(true);
-  };
-
-  const handleUpdateEvent = async (updatedEvent: EventProps) => {
+  const applyToEvent = async (eventId: number) => {
     const userId = localStorage.getItem("userId");
+    try {
+      const response = await fetch(`http://localhost:8080/events/${eventId}/apply?userId=${userId}`, {
+        method: "POST",
+      });
+      if (!response.ok) throw new Error("Failed to apply to event");
+      fetchEvents(); // Refresh the events after applying
+    } catch (err) {
+      console.error("Error applying to event:", err);
+      alert("Failed to apply to the event.");
+    }
+  };
+
+  const updateEvent = async (updatedEvent: EventProps) => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      alert("User ID not found. Please log in.");
+      return;
+    }
+
     try {
       const response = await fetch(`http://localhost:8080/events/${updatedEvent.id}?userId=${userId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedEvent),
       });
-      if (response.ok) {
-        const updatedEvents = events.map((event) =>
-            event.id === updatedEvent.id ? { ...event, ...updatedEvent } : event
-        );
-        setEvents(updatedEvents);
-      } else {
-        alert("Failed to update event.");
-      }
+
+      if (!response.ok) throw new Error("Failed to update event");
+
+      const updatedEventResponse = await response.json(); // Get the updated event from the backend
+      setEvents((prev) =>
+          prev.map((event) => (event.id === updatedEvent.id ? updatedEventResponse : event))
+      );
+      alert("Event updated successfully.");
     } catch (err) {
       console.error("Error updating event:", err);
-    } finally {
-      setIsUpdatePopupVisible(false);
+      alert("Failed to update event.");
+    }
+  };
+
+
+  const viewApplicants = async (eventId: number) => {
+    const userId = localStorage.getItem("userId");
+    try {
+      const response = await fetch(`http://localhost:8080/events/${eventId}/participants?userId=${userId}`);
+      if (!response.ok) throw new Error("Failed to fetch applicants");
+      const participants = await response.json();
+      setApplicants(participants);
+      setShowApplicantsPopup(true);
+    } catch (err) {
+      console.error("Error fetching applicants:", err);
+      alert("Failed to fetch applicants.");
     }
   };
 
   useEffect(() => {
     fetchEvents();
   }, []);
-
-  if (error) {
-    return <p>{error}</p>;
-  }
 
   return (
       <div className="event-list-container">
@@ -102,21 +126,36 @@ const EventList: React.FC<EventListProps> = ({ isAdmin }) => {
                   event={event}
                   isAdmin={isAdmin}
                   onDelete={deleteEvent}
-                  onUpdate={showUpdatePopup}
+                  onApply={applyToEvent}
+                  onUpdate={(event) => {
+                    setSelectedEvent(event);
+                    setIsUpdatePopupVisible(true);
+                  }}
+                  onViewApplicants={viewApplicants}
               />
           ))}
         </div>
-        <UpdateEventPopup
-            isVisible={isUpdatePopupVisible}
-            onClose={() => setIsUpdatePopupVisible(false)}
-            event={selectedEvent}
-            onUpdate={handleUpdateEvent}
-        />
-        <div className="back-to-tasks-button-container">
-          <button className="back-to-tasks-btn" onClick={handleBackToTasks}>
-            Back to Tasks
-          </button>
-        </div>
+        {isAdmin && selectedEvent && (
+            <UpdateEventPopup
+                isVisible={isUpdatePopupVisible}
+                onClose={() => setIsUpdatePopupVisible(false)}
+                event={selectedEvent}
+                onUpdate={updateEvent}
+            />
+        )}
+        {showApplicantsPopup && (
+            <div className="applicants-popup">
+              <h2>Applicants</h2>
+              <ul>
+                {applicants.map((applicant, index) => (
+                    <li key={index}>
+                      {applicant.name} - {applicant.email}
+                    </li>
+                ))}
+              </ul>
+              <button onClick={() => setShowApplicantsPopup(false)}>Close</button>
+            </div>
+        )}
       </div>
   );
 };

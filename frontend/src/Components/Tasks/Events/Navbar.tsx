@@ -12,12 +12,13 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  const handleViewEvents = () => {
-    navigate("/events");
-  };
-
-  const handleApplyEvent = () => {
-    navigate("/apply-event");
+  const handleViewMyEvents = () => {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      alert("User ID not found. Please log in.");
+      return;
+    }
+    navigate(`/user-events/${userId}`); // Navigate to a new route for user-specific events
   };
 
   const handleLogout = () => {
@@ -46,18 +47,12 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
           ) : (
             <>
               <li>
-                <button className="add-task-btn" onClick={handleViewEvents}>
+                <button className="add-task-btn" onClick={handleViewMyEvents}>
                   View My Events
-                </button>
-              </li>
-              <li>
-                <button className="add-task-btn" onClick={handleApplyEvent}>
-                  Apply to Event
                 </button>
               </li>
             </>
           )}
-
           <li>
             <button className="add-task-btn" onClick={handleLogout}>
               Logout
