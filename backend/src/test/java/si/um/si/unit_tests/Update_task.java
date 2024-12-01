@@ -50,13 +50,21 @@ public class Update_task {
         String password = "password123";
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
-        when(userRepository.save(any(Users.class))).thenReturn(new Users());
         when(passwordEncoder.encode(password)).thenReturn("encodedPassword");
 
+        // Dynamically return a Users object with the properties from the input
+        when(userRepository.save(any(Users.class))).thenAnswer(invocation -> {
+            Users user = invocation.getArgument(0);
+            user.setPassword("encodedPassword"); // Simulate the saved encoded password
+            return user;
+        });
+
         Users user = usersService.registerUser(username, email, password);
+
         assertNotNull(user);
         assertEquals("encodedPassword", user.getPassword());
     }
+
 
     // **Negative Scenario: User Registration - Email Already in Use**
     @Test
