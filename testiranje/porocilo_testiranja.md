@@ -175,7 +175,7 @@ Test je bil uspešen.
 
 
 ## Porocilo o testiranju:
-###Test 1: Edit_task
+### Test 1: Edit_task
 **Pozitiven scenarij:**  Preverjanje, ali je naloga uspešno urejena, ko sta podana veljavna ID naloge in opis.
 **Specifični testi:**
 Testiranje z veljavnim uporabniškim ID-jem (npr. uporabniški ID 101) in opisom naloge "Dopolni projekt".
@@ -194,7 +194,7 @@ Testi z različnimi opisi nalog (veljavne in neveljavne vrednosti).
 Orodje: JUnit 5 s pomočjo parametra @Timeout.
 Preverjanje, da se metoda za posodabljanje nalog zaključi v manj kot 1 sekundi.
 
-###Test 2: Login
+### Test 2: Login
 **Test za uspešno prijavo uporabnika (testLoginUser_Success):**
 Ta test preizkuša scenarij, kjer uporabnik z veljavnim e-poštnim naslovom in pravilnim geslom uspešno opravi prijavo. Preverja, ali metoda loginUser pravilno najde uporabnika in preveri ujemanje gesla.
 **Pomen:** Ta test je ključnega pomena za zagotavljanje, da uporabniki lahko dostopajo do sistema, če vpišejo pravilne podatke.
@@ -208,7 +208,7 @@ Test za uspešno prijavo je preveril, da je uporabnik pravilno prepoznan, ko so 
 Test za neuspešno prijavo je preveril, da sistem zavrne neobstoječe uporabnike, kar pomeni, da ni mogoče vstopiti v sistem z napačnimi podatki.
 Odpravljene napake: Med izvajanjem testov niso bile odkrite nobene napake, saj so bili vsi rezultati skladni z pričakovanji. Testi so jasno preverili različne pogoje (pravilne in napačne podatke), zato ni bilo potrebe po odpravi napak.
 
-###Test 3: Registration
+### Test 3: Registration
 **Pozitiven scenarij:** Testiranje registracije z veljavnimi podatki.
 **Specifični testi:**
 Testiranje registracije z uporabniškim imenom "newuser", e-poštnim naslovom "newuser@primer.com" in geslom "SecurePassword123".
@@ -224,7 +224,7 @@ Orodja: JUnit 5, Mockito za preverjanje napak pri interakciji z bazo.
 Testi so uspešno preverili vse validacije in zagotovili, da se registracija izvaja samo, če so podatki veljavni.
 
 
-###Test 4: Update_task
+### Test 4: Update_task
 **Pozitiven scenarij:** Preverjanje, ali je naloga uspešno posodobljena, ko je uporabnik najden in so podatki naloge ustrezni.
 **Specifični testi:**
 Posodobitev naloge uporabnika z ID-jem 101 in opisom "Dokončaj nalogo".
