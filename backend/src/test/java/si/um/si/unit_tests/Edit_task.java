@@ -1,6 +1,16 @@
 package si.um.si.unit_tests;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.TestFactory;  // Import TestFactory annotation
+import org.junit.jupiter.api.Timeout;
+
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class Edit_task {
@@ -16,11 +26,34 @@ public class Edit_task {
         }
     }
 
+    private TaskService taskService;
+
+    // Set up the test environment before all test methods run
+    @BeforeAll
+    static void initAll() {
+        System.out.println("Initializing test class... This runs before all tests.");
+    }
+
+    // Set up the test environment before each test method
+    @BeforeEach
+    void setUp() {
+        taskService = new TaskService(); // Initialize TaskService before each test
+        System.out.println("Setting up the TaskService for each test.");
+    }
+
+    // Clean up after each test method
+    @AfterEach
+    void tearDown() {
+        System.out.println("Cleaning up after test.");
+        // Reset any test-specific resources if necessary
+    }
+
     // Positive Scenario: Test for successful task edit
     @Test
+    @DisplayName("Test successful task edit with valid taskId and description")
+    @Tag("edit")
     void testEditTask_Success() {
         // Arrange: Set up valid inputs for task editing
-        TaskService taskService = new TaskService();
         String taskId = "task123";
         String newDescription = "Updated task description";
 
@@ -33,9 +66,10 @@ public class Edit_task {
 
     // Negative Scenario: Test for failed task edit due to invalid input
     @Test
+    @DisplayName("Test failed task edit due to invalid taskId")
+    @Tag("failure")
     void testEditTask_Failure() {
         // Arrange: Set up invalid inputs for task editing
-        TaskService taskService = new TaskService();
         String taskId = ""; // Invalid task ID
         String newDescription = "Updated task description";
 
@@ -48,9 +82,10 @@ public class Edit_task {
 
     // Another Negative Scenario: Test for task edit failure with null description
     @Test
+    @DisplayName("Test failed task edit due to null description")
+    @Tag("failure")
     void testEditTask_Failure_InvalidDescription() {
         // Arrange: Set up invalid input for the description
-        TaskService taskService = new TaskService();
         String taskId = "task123";
         String newDescription = null; // Invalid description
 
@@ -59,5 +94,35 @@ public class Edit_task {
 
         // Assert: Verify that the task edit fails due to invalid description
         assertFalse(result, "Task edit should fail when the description is null.");
+    }
+
+    // Test Factory: Generate multiple task edit tests dynamically
+    @TestFactory
+    @DisplayName("Test task edit multiple times with dynamic generation")
+    Stream<org.junit.jupiter.api.DynamicTest> dynamicTestForTaskEdit() {
+        String taskId = "task123";
+        String newDescription = "Repeated test description";
+
+        return Stream.of(
+                org.junit.jupiter.api.DynamicTest.dynamicTest("Test 1 - Task edit",
+                        () -> assertTrue(taskService.editTask(taskId, newDescription), "Task should be edited successfully.")),
+                org.junit.jupiter.api.DynamicTest.dynamicTest("Test 2 - Task edit",
+                        () -> assertTrue(taskService.editTask(taskId, newDescription), "Task should be edited successfully.")),
+                org.junit.jupiter.api.DynamicTest.dynamicTest("Test 3 - Task edit",
+                        () -> assertTrue(taskService.editTask(taskId, newDescription), "Task should be edited successfully."))
+        );
+    }
+
+    // Timeout Test: This test will fail if it takes more than 1 second to execute
+    @Test
+    @Timeout(value = 1)  // Timeout value is 1 second
+    @DisplayName("Test for task edit with timeout")
+    void testEditTask_Timeout() {
+        String taskId = "task123";
+        String newDescription = "Timeout test description";
+
+        // Simulate a task edit that is guaranteed to finish in less than 1 second
+        boolean result = taskService.editTask(taskId, newDescription);
+        assertTrue(result, "Task should be edited successfully before the timeout.");
     }
 }
