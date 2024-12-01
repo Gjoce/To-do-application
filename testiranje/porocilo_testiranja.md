@@ -172,3 +172,77 @@ Test je bil uspešen.
 
 - Klicana je metoda `findById` na `UserRepository` in `EventRepository`.
 - Metoda za brisanje ni bila klicana na repozitoriju dogodkov.
+
+
+## Porocilo o testiranju:
+###Test 1: Edit_task
+**Pozitiven scenarij:**  Preverjanje, ali je naloga uspešno urejena, ko sta podana veljavna ID naloge in opis.
+**Specifični testi:**
+Testiranje z veljavnim uporabniškim ID-jem (npr. uporabniški ID 101) in opisom naloge "Dopolni projekt".
+Preverjanje, ali se naloga uspešno posodobi v bazi.
+Testni scenarij: Kličemo metodo update_task(id, description) in preverimo, če se podatki posodobijo.
+
+**Negativni scenariji:**
+Test za neuspešno urejanje naloge zaradi neveljavnega ID-ja naloge (prazen ID).
+Testni scenarij: Kličemo metodo update_task("", description), pričakujemo napako (npr. IllegalArgumentException).
+Test za neuspešno urejanje naloge zaradi null opisa.
+Testni scenarij: Kličemo metodo update_task(id, null), pričakujemo napako (npr. NullPointerException).
+Testna orodja: JUnit 5 za preverjanje napak in verifikacijo rezultatov.
+Testna tovarna: Uporabljamo JUnit parametrizirane teste za dinamično generiranje več primerov:
+Testi z različnimi ID-ji uporabnikov (veljavni in neveljavni).
+Testi z različnimi opisi nalog (veljavne in neveljavne vrednosti).
+Orodje: JUnit 5 s pomočjo parametra @Timeout.
+Preverjanje, da se metoda za posodabljanje nalog zaključi v manj kot 1 sekundi.
+
+###Test 2: Login
+**Test za uspešno prijavo uporabnika (testLoginUser_Success):**
+Ta test preizkuša scenarij, kjer uporabnik z veljavnim e-poštnim naslovom in pravilnim geslom uspešno opravi prijavo. Preverja, ali metoda loginUser pravilno najde uporabnika in preveri ujemanje gesla.
+**Pomen:** Ta test je ključnega pomena za zagotavljanje, da uporabniki lahko dostopajo do sistema, če vpišejo pravilne podatke.
+**Test za neuspešno prijavo uporabnika (testLoginUser_Failure):**
+Ta test preizkuša scenarij, kjer uporabnik z neveljavnim e-poštnim naslovom (ki ne obstaja v bazi podatkov) poskusi prijavo. Preverja, ali metoda loginUser pravilno vrne prazno vrednost (ne najde uporabnika).
+**Pomen:** Ta test zagotavlja, da sistem zaščiti podatke in ne omogoča dostopa uporabnikom, ki niso registrirani v bazi.
+
+***Kratka analiza uspešnosti testov:***
+Vsi testi so bili uspešno opravljeni, kar pomeni, da so tako pozitivni kot negativni scenariji pravilno obdelani v okviru sistema za prijavo.
+Test za uspešno prijavo je preveril, da je uporabnik pravilno prepoznan, ko so vneseni pravi podatki.
+Test za neuspešno prijavo je preveril, da sistem zavrne neobstoječe uporabnike, kar pomeni, da ni mogoče vstopiti v sistem z napačnimi podatki.
+Odpravljene napake: Med izvajanjem testov niso bile odkrite nobene napake, saj so bili vsi rezultati skladni z pričakovanji. Testi so jasno preverili različne pogoje (pravilne in napačne podatke), zato ni bilo potrebe po odpravi napak.
+
+###Test 3: Registration
+**Pozitiven scenarij:** Testiranje registracije z veljavnimi podatki.
+**Specifični testi:**
+Testiranje registracije z uporabniškim imenom "newuser", e-poštnim naslovom "newuser@primer.com" in geslom "SecurePassword123".
+Preverjanje, da se geslo pravilno kodira z BCryptPasswordEncoder.
+Preverjanje, da so vsi podatki pravilno shranjeni v bazi podatkov.
+**Negativni scenarij:** Testiranje napačnih vhodnih podatkov, kot so prazno uporabniško ime ali napačen e-poštni naslov.
+**Specifični testi:**
+Preverjanje napak pri registraciji z neveljavnim uporabniškim imenom (prazno uporabniško ime).
+Preverjanje napak pri napačnem e-poštnem naslovu (npr. "invalidemail.com" brez znaka "@").
+Preverjanje, da geslo ni pravilno kodirano, če ni ustrezno zakodirano.
+Orodja: JUnit 5, Mockito za preverjanje napak pri interakciji z bazo.
+**Analiza uspešnosti:**
+Testi so uspešno preverili vse validacije in zagotovili, da se registracija izvaja samo, če so podatki veljavni.
+
+
+###Test 4: Update_task
+**Pozitiven scenarij:** Preverjanje, ali je naloga uspešno posodobljena, ko je uporabnik najden in so podatki naloge ustrezni.
+**Specifični testi:**
+Posodobitev naloge uporabnika z ID-jem 101 in opisom "Dokončaj nalogo".
+Preverjanje, da je naloga uspešno posodobljena v bazi.
+Preverjanje, da se spremembe odražajo v uporabniški nalogi.
+**Negativni scenariji:**
+Posodobitev naloge, ki ne obstaja v bazi.
+Specifični testi: Preverjanje, da posodabljanje naloge z ID-jem, ki ne obstaja, povzroči napako.
+Posodobitev naloge z neveljavnim ID uporabnika.
+Specifični testi: Preverjanje napak pri poskusu posodabljanja naloge z neveljavnim uporabniškim ID-jem (npr. prazen ID).
+Uporabnik nima dovolj pravic za posodobitev naloge.
+Specifični testi: Preverjanje, da uporabnik z ID-jem 101 ne more posodobiti naloge, ki ni njegova.
+**Kratka analiza uspešnosti:**
+Testi so pravilno prepoznali vse napake in zagotovili, da samo uporabnik, ki je lastnik naloge, lahko posodobi nalogo.
+Vsi negativni scenariji so pravilno obravnavani s sprožitvijo napak (neobstoječa naloga, napačen ID uporabnika, pomanjkanje pravic).
+
+------------------------
+**Pomembnost testov:**
+Testiranje posodabljanja nalog, prijave in registracije je ključnega pomena za zagotavljanje, da sistem omogoča samo veljavne operacije, kot so posodobitev nalog lastnikov, uspešna prijava in varna registracija uporabnikov. Testiranje varnosti pri posodobitvah nalog je še posebej pomembno za preprečevanje nepooblaščenih sprememb podatkov.
+
+
