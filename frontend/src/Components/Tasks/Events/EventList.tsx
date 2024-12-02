@@ -4,6 +4,7 @@ import UpdateEventPopup from "./UpdateEvent";
 import "../../../EventList.css";
 import "../../../Event.css";
 
+
 interface EventProps {
   id: number;
   name: string;
@@ -70,6 +71,7 @@ const EventList: React.FC<EventListProps> = ({ isAdmin }) => {
       alert("Failed to apply to the event.");
     }
   };
+
 
   const updateEvent = async (updatedEvent: EventProps) => {
     const userId = localStorage.getItem("userId");
@@ -149,7 +151,8 @@ const EventList: React.FC<EventListProps> = ({ isAdmin }) => {
               <ul>
                 {applicants.map((applicant, index) => (
                     <li key={index}>
-                      {applicant.name} - {applicant.email}
+                      <strong>Name:</strong> {applicant.name}<br />
+                      <strong>Email:</strong> {applicant.email}<br />
                     </li>
                 ))}
               </ul>

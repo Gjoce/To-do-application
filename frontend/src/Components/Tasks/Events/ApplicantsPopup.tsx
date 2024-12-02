@@ -1,4 +1,8 @@
 import React from "react";
+import "../../../UpdateEventPopup.css";
+import "../../../Navbar.css";
+import "../../../Event.css";
+
 
 interface ApplicantsPopupProps {
     isVisible: boolean;

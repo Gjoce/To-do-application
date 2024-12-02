@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "../../../EventList.css";
 import Event from "./Event";
-import Footer from "../../Footer.tsx";
+import "../../../EventList.css";
 
 interface EventProps {
     id: number;
@@ -12,7 +11,7 @@ interface EventProps {
     location: string;
     maxParticipants: number;
     currentParticipants: number;
-    applied?: boolean;
+    applied?: boolean;  // Track if user applied
 }
 
 const UserEvents: React.FC = () => {
@@ -47,7 +46,7 @@ const UserEvents: React.FC = () => {
 
     return (
         <div className="event-list-container">
-            <h2>My  Events</h2>
+            <h2>My Applied Events</h2>
             {events.length === 0 ? (
                 <p>No events found.</p>
             ) : (
@@ -56,7 +55,7 @@ const UserEvents: React.FC = () => {
                         <Event
                             key={event.id}
                             event={event}
-                            isAdmin={false} // User is not an admin
+                            isAdmin={false}  // User is not an admin
                             onDelete={() => {}} // No delete functionality for user
                             onApply={() => {}} // No apply functionality for already applied events
                             onUpdate={() => {}} // No update functionality for user
@@ -65,7 +64,6 @@ const UserEvents: React.FC = () => {
                     ))}
                 </div>
             )}
-            <Footer />
         </div>
     );
 };

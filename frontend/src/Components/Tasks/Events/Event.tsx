@@ -10,7 +10,7 @@ interface EventProps {
     location: string;
     maxParticipants: number;
     currentParticipants: number;
-    applied?: boolean;
+    applied?: boolean;  // Track if user applied for the event
 }
 
 interface EventComponentProps {
@@ -38,40 +38,24 @@ const Event: React.FC<EventComponentProps> = ({
             </div>
             <div className="event-card-body">
                 <p className="event-desc">{event.description || "No description provided."}</p>
-                <p>
-                    <strong>Start:</strong> {new Date(event.startTime).toLocaleString()}
-                </p>
-                <p>
-                    <strong>End:</strong> {new Date(event.endTime).toLocaleString()}
-                </p>
-                <p>
-                    <strong>Location:</strong> {event.location}
-                </p>
-                <p>
-                    <strong>Max Participants:</strong> {event.maxParticipants}
-                </p>
+                <p><strong>Start:</strong> {new Date(event.startTime).toLocaleString()}</p>
+                <p><strong>End:</strong> {new Date(event.endTime).toLocaleString()}</p>
+                <p><strong>Location:</strong> {event.location}</p>
+                <p><strong>Max Participants:</strong> {event.maxParticipants}</p>
                 {(event.applied || isAdmin) && (
-                    <p>
-                        <strong>Remaining Slots:</strong>{" "}
-                        {event.maxParticipants - event.currentParticipants}
-                    </p>
+                    <p><strong>Remaining Slots:</strong> {event.maxParticipants - event.currentParticipants}</p>
                 )}
             </div>
             <div className="event-card-footer">
                 {isAdmin ? (
                     <div className="admin-actions">
-                        <button className="view-applicants-btn" onClick={() => onViewApplicants(event.id)}>
-                            View Applicants
-                        </button>
-                        <button className="update-btn" onClick={() => onUpdate(event)}>
-                            Update
-                        </button>
-                        <button className="delete-btn" onClick={() => onDelete(event.id)}>
-                            Delete
-                        </button>
+                        <button className="view-applicants-btn" onClick={() => onViewApplicants(event.id)}>View Applicants</button>
+                        <button className="update-btn" onClick={() => onUpdate(event)}>Update</button>
+                        <button className="delete-btn" onClick={() => onDelete(event.id)}>Delete</button>
                     </div>
                 ) : (
-                    !event.applied && ( // Hide the "Apply" button for already applied events
+                    // Hide the Apply button if user has already applied
+                    !event.applied && (
                         <button
                             className="apply-btn"
                             disabled={event.maxParticipants <= event.currentParticipants}

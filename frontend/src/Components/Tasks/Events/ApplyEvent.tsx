@@ -46,6 +46,7 @@ const ApplyEvent: React.FC = () => {
                 });
                 if (!response.ok) throw new Error(`Failed to apply to event with ID: ${eventId}`);
                 const updatedEvent = await response.json();
+
                 setEvents((prev) =>
                     prev.map((event) => (event.id === eventId ? { ...event, ...updatedEvent, applied: true } : event))
                 );

@@ -9,7 +9,9 @@ import si.um.si.model.Users;
 import si.um.si.service.EventService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/events")
@@ -81,10 +83,13 @@ public class EventController {
 
     // View participants of an event (Admin only)
     @GetMapping("/{eventId}/participants")
-    public ResponseEntity<List<Users>> getParticipants(@PathVariable Long eventId, @RequestParam Long userId) {
+    public ResponseEntity<List<Map<String, String>>> getParticipants(@PathVariable Long eventId, @RequestParam Long userId) {
         try {
             List<Users> participants = eventService.getParticipants(eventId, userId);
-            return ResponseEntity.ok(participants);
+            List<Map<String, String>> result = participants.stream()
+                    .map(user -> Map.of("name", user.getUsername(), "email", user.getEmail()))
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(result);
         } catch (SecurityException e) {
             return ResponseEntity.status(403).build();
         }
