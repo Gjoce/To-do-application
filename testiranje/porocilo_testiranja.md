@@ -246,3 +246,89 @@ Vsi negativni scenariji so pravilno obravnavani s sprožitvijo napak (neobstoje�
 Testiranje posodabljanja nalog, prijave in registracije je ključnega pomena za zagotavljanje, da sistem omogoča samo veljavne operacije, kot so posodobitev nalog lastnikov, uspešna prijava in varna registracija uporabnikov. Testiranje varnosti pri posodobitvah nalog je še posebej pomembno za preprečevanje nepooblaščenih sprememb podatkov.
 
 
+# **_Test 1: Apply to Event / Prijava na dogodek_**
+
+  Pozitiven scenarij / Positive Scenario:
+  Testiranje prijave uporabnika na dogodek z veljavnimi podatki.
+
+  Specifični testi / Specific Tests:
+
+    Preverjanje, da uporabnik uspešno doda dogodek v seznam udeležencev.
+    Preverjanje, da se seznam udeležencev ustrezno posodobi v bazi podatkov.
+    Preverjanje, da prijava ne preseže števila dovoljenih udeležencev.
+
+  Negativen scenarij / Negative Scenario:
+  Testiranje napačnih vhodnih podatkov ali pogojev za prijavo.
+  Specifični testi / Specific Tests:
+
+    Preverjanje napake, če je dogodek že popolnoma zaseden.
+    Preverjanje, da uporabnik ni prijavljen na dogodek, če ta ne obstaja v bazi.
+
+  Orodja / Tools: JUnit 5, Mockito za simulacijo obnašanja baze podatkov.
+
+  Analiza uspešnosti / Performance Analysis:
+  Testi so preverili uspešnost prijave in zagotovili, da sistem pravilno obravnava tako uspešne kot neuspešne primere prijave.
+
+#   **Test 2: View Events (User) / Ogled dogodkov (uporabnik)**
+
+  Pozitiven scenarij / Positive Scenario:
+
+  Testiranje uspešnega pridobivanja seznama dogodkov.
+  Specifični testi / Specific Tests:
+
+    Preverjanje, da se seznam dogodkov pravilno vrne iz baze podatkov.
+    Preverjanje, da je vsak dogodek prikazan z ustreznimi podrobnostmi (ime, lokacija, datum).
+
+  Negativen scenarij / Negative Scenario:
+  Testiranje, ko podatkov o dogodkih ni mogoče pridobiti.
+  Specifični testi / Specific Tests:
+
+    Simulacija napake baze podatkov pri pridobivanju dogodkov.
+    Preverjanje, da se v primeru napake vrne prazen seznam ali ustrezno sporočilo o napaki.
+
+  Orodja / Tools: JUnit 5, Mockito za simulacijo baze podatkov.
+
+  Analiza uspešnosti / Performance Analysis:
+  Testi so preverili tako uspešne kot neuspešne scenarije pridobivanja dogodkov in zagotovili ustrezno delovanje sistema.
+
+#   **Test 3: View Events (Admin) / Ogled dogodkov (administrator)**
+
+  Pozitiven scenarij / Positive Scenario:
+  Testiranje uspešnega prikaza vseh dogodkov za administratorja.
+  Specifični testi / Specific Tests:
+
+    Preverjanje, da administrator vidi vse dogodke brez omejitev.
+    Preverjanje, da so podrobnosti o dogodkih pravilno prikazane.
+
+  Negativen scenarij / Negative Scenario:
+  Testiranje, ko administrator poskuša pridobiti dogodke, a pride do napake.
+  Specifični testi / Specific Tests:
+
+    Simulacija napake baze podatkov pri pridobivanju dogodkov.
+    Preverjanje, da se v primeru napake vrne ustrezno sporočilo o napaki.
+
+  Orodja / Tools: JUnit 5, Mockito za simulacijo baze podatkov.
+
+  Analiza uspešnosti / Performance Analysis:
+  Testi so zagotovili, da administrator vidi vse dogodke in da sistem ustrezno obravnava napake.
+
+#   **Test 4: Update Event / Posodobi dogodek**
+
+  Pozitiven scenarij / Positive Scenario:
+  Testiranje uspešne posodobitve dogodka z veljavnimi podatki.
+  Specifični testi / Specific Tests:
+
+    Preverjanje, da se podrobnosti dogodka pravilno posodobijo v bazi podatkov.
+    Preverjanje, da posodobitev izvede samo administrator.
+
+  Negativen scenarij / Negative Scenario:
+  Testiranje napak pri posodobitvi dogodka.
+  Specifični testi / Specific Tests:
+
+    Preverjanje napake, ko uporabnik, ki ni administrator, poskuša posodobiti dogodek.
+    Preverjanje napake, če dogodek za posodobitev ne obstaja.
+
+  Orodja / Tools: JUnit 5, Mockito za simulacijo baze podatkov.
+
+  Analiza uspešnosti / Performance Analysis:
+  Testi so zagotovili, da se dogodki pravilno posodobijo in da sistem ustrezno obravnava nepooblaščene poskuse posodobitve.

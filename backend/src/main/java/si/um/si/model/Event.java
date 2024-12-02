@@ -52,8 +52,10 @@ public class Event {
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+
     @JsonIgnore //very important to add this annotation
     private List<Users> participants = new ArrayList<>();
+
 
     // Default Constructor
     public Event() {}
