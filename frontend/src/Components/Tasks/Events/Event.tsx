@@ -52,9 +52,6 @@ const Event: React.FC<EventComponentProps> = ({
                         <p><strong>End:</strong> {new Date(event.endTime).toLocaleString()}</p>
                         <p><strong>Location:</strong> {event.location}</p>
                         <p><strong>Max Participants:</strong> {event.maxParticipants}</p>
-                        {(event.applied || isAdmin) && (
-                            <p><strong>Remaining Slots:</strong> {event.maxParticipants - event.currentParticipants}</p>
-                        )}
                     </div>
                     <div className="event-card-footer">
                         {isAdmin ? (

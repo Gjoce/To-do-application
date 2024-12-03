@@ -93,7 +93,6 @@ const EventList: React.FC<EventListProps> = ({ isAdmin }) => {
       setEvents((prev) =>
           prev.map((event) => (event.id === updatedEvent.id ? updatedEventResponse : event))
       );
-      alert("Event updated successfully.");
     } catch (err) {
       console.error("Error updating event:", err);
       alert("Failed to update event.");
