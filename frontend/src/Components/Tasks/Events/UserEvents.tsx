@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Event from "./Event";
 import "../../../EventList.css";
+import Footer from "../../Footer.tsx";
+import EventDetails from "./EventDetails";
+import { useNavigate } from "react-router-dom";
 
 interface EventProps {
     id: number;
@@ -10,13 +12,13 @@ interface EventProps {
     endTime: string;
     location: string;
     maxParticipants: number;
-    currentParticipants: number;
-    applied?: boolean;  // Track if user applied
+    applied?: boolean;
 }
 
 const UserEvents: React.FC = () => {
     const [events, setEvents] = useState<EventProps[]>([]);
     const [error, setError] = useState("");
+    const navigate = useNavigate(); // Initialize navigate hook
 
     const fetchUserEvents = async () => {
         const userId = localStorage.getItem("userId");
@@ -44,6 +46,11 @@ const UserEvents: React.FC = () => {
         return <p>{error}</p>;
     }
 
+    // Function to handle navigating back to the events list
+    const handleBacktoEvents = () => {
+        navigate("/events");
+    };
+
     return (
         <div className="event-list-container">
             <h2>My Applied Events</h2>
@@ -52,18 +59,28 @@ const UserEvents: React.FC = () => {
             ) : (
                 <div className="event-list">
                     {events.map((event) => (
-                        <Event
+                        <EventDetails
                             key={event.id}
-                            event={event}
-                            isAdmin={false}  // User is not an admin
-                            onDelete={() => {}} // No delete functionality for user
-                            onApply={() => {}} // No apply functionality for already applied events
-                            onUpdate={() => {}} // No update functionality for user
-                            onViewApplicants={() => {}} // No view applicants functionality for user
+                            id={event.id}
+                            name={event.name}
+                            description={event.description}
+                            startTime={event.startTime}
+                            endTime={event.endTime}
+                            location={event.location}
+                            maxParticipants={event.maxParticipants}
                         />
                     ))}
                 </div>
             )}
+            <div className="back-to-events-button-container">
+                <button
+                    className="back-to-tasks-btn"
+                    onClick={handleBacktoEvents}
+                >
+                    Back to Events
+                </button>
+            </div>
+            <Footer />
         </div>
     );
 };

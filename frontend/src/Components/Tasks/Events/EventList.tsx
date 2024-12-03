@@ -146,7 +146,7 @@ const EventList: React.FC<EventListProps> = ({ isAdmin }) => {
             />
         )}
         {showApplicantsPopup && (
-            <div className="applicants-popup">
+            <div className="popup-body">
               <h2>Applicants</h2>
               <ul>
                 {applicants.map((applicant, index) => (
