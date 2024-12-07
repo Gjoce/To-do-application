@@ -41,5 +41,9 @@ public class Attachment {
         this.fileType = contentType;
     }
 
+    public String getId() {
+        return id.toString();
+    }
+
     // Getters and setters
 }
