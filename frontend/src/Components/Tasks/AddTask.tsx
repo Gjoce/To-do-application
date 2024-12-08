@@ -13,6 +13,8 @@ function PopupForm({ isVisible, onClose }: PopupFormProps) {
   const [priority, setPriority] = useState("LOW");
   const [dueDate, setDueDate] = useState("");
   const [attachedFile, setAttachedFile] = useState<File | null>(null);
+  const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null); // To store the file URL
+  const [viewAttachment, setViewAttachment] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,6 +49,9 @@ function PopupForm({ isVisible, onClose }: PopupFormProps) {
         throw new Error("Failed to create task");
       }
 
+      const result = await response.json(); // Assuming API returns the uploaded file's URL
+      setUploadedFileUrl(result.fileUrl || null);
+
       // Reset form fields after successful submission
       setTitle("");
       setDescription("");
@@ -54,6 +59,7 @@ function PopupForm({ isVisible, onClose }: PopupFormProps) {
       setPriority("LOW");
       setDueDate("");
       setAttachedFile(null);
+      setViewAttachment(false);
 
       onClose(); // Close the popup
     } catch (error) {
@@ -64,6 +70,10 @@ function PopupForm({ isVisible, onClose }: PopupFormProps) {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setAttachedFile(file);
+  };
+
+  const handleViewAttachment = () => {
+    setViewAttachment(!viewAttachment);
   };
 
   return (
@@ -153,6 +163,23 @@ function PopupForm({ isVisible, onClose }: PopupFormProps) {
                 </button>
               </div>
             </form>
+            {uploadedFileUrl && (
+                <div className="attachment-section">
+                  <button
+                      className="btn-attachment"
+                      onClick={handleViewAttachment}
+                  >
+                    {viewAttachment ? "Hide Attachment" : "View Attachment"}
+                  </button>
+                  {viewAttachment && (
+                      <div className="attachment-display">
+                        <a href={uploadedFileUrl} target="_blank" rel="noopener noreferrer">
+                          Download Attached File
+                        </a>
+                      </div>
+                  )}
+                </div>
+            )}
           </div>
         </div>
       </div>
