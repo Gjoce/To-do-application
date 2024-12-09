@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../Navbar.css";
 
 interface UpdateTaskPopupProps {
@@ -26,6 +26,43 @@ const UpdateTaskPopup: React.FC<UpdateTaskPopupProps> = ({
   const [status, setStatus] = useState(task.status);
   const [priority, setPriority] = useState(task.priority);
   const [dueDate, setDueDate] = useState(task.dueDate);
+  const [attachment, setAttachment] = useState<{
+    fileUrl: string;
+    fileName: string;
+  } | null>(null);
+
+  // Fetch attachment when the component loads
+  useEffect(() => {
+    const fetchAttachment = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/files/attachments/certain/${task.id}`
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Attachment data:", data);
+
+          // Ensure the response has the expected fileName and create the fileUrl
+          if (data && data.fileName) {
+            // Encode the file name for URL safety
+            const fileUrl = `http://localhost:8080/api/files/attachments/${encodeURIComponent(
+              data.fileName
+            )}`;
+            setAttachment({ fileUrl, fileName: data.fileName });
+          } else {
+            console.error("File name is undefined in the response");
+          }
+        } else {
+          console.error("Failed to fetch attachment details");
+        }
+      } catch (error) {
+        console.error("Error fetching attachment:", error);
+      }
+    };
+
+    fetchAttachment();
+  }, [task.id]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,6 +154,16 @@ const UpdateTaskPopup: React.FC<UpdateTaskPopupProps> = ({
               </button>
             </div>
           </form>
+
+          {/* Display the attachment if it exists */}
+          {attachment && (
+            <div className="attachment-section">
+              <h3>Attachment:</h3>
+              <a href={attachment.fileUrl} download={attachment.fileName}>
+                <button className="btn-download">Download Attachment</button>
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>

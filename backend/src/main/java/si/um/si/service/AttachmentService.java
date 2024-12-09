@@ -25,29 +25,48 @@ public class AttachmentService {
     }
 
     public Attachment saveAttachment(MultipartFile file, Long taskId) throws IOException {
+        System.out.println("File size before saving: " + file.getSize());
+
         // Ensure the upload directory exists
         File directory = new File(uploadDir);
         if (!directory.exists()) {
-            directory.mkdirs();
+            boolean created = directory.mkdirs();
+            if (!created) {
+                throw new IOException("Failed to create directory at " + uploadDir);
+            }
         }
 
-        // Generate unique file name
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+
+        String fileName = file.getOriginalFilename();
+        if (fileName == null) {
+            throw new IOException("File name is not valid");
+        }
+
         Path filePath = Paths.get(uploadDir, fileName);
 
-        // Save the file locally
+
         file.transferTo(filePath.toFile());
+
+
+        File savedFile = filePath.toFile();
+        System.out.println("File size after saving: " + savedFile.length());
 
         // Save metadata to the database
         Attachment attachment = new Attachment();
         attachment.setTaskId(taskId);
-        attachment.setFileName(file.getOriginalFilename());
+        attachment.setFileName(fileName);
         attachment.setFilePath(filePath.toString());
         attachment.setFileType(file.getContentType());
         return attachmentRepository.save(attachment);
     }
 
+
     public List<Attachment> getAttachmentsByTaskId(Long taskId) {
+
         return attachmentRepository.findByTaskId(taskId);
     }
+
+
+
 }
+
