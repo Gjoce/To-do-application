@@ -44,14 +44,13 @@ const UpdateTaskPopup: React.FC<UpdateTaskPopupProps> = ({
           console.log("Attachment data:", data);
 
           // Ensure the response has the expected fileName and create the fileUrl
-          if (data && data.fileName) {
-            // Encode the file name for URL safety
-            const fileUrl = `http://localhost:8080/api/files/attachments/${encodeURIComponent(
-              data.fileName
-            )}`;
-            setAttachment({ fileUrl, fileName: data.fileName });
+          if (data && data.fileUrl) {
+            setAttachment({
+              fileUrl: data.fileUrl, // Use the file URL returned by the backend
+              fileName: data.fileName, // If needed for other purposes
+            });
           } else {
-            console.error("File name is undefined in the response");
+            console.error("File URL is undefined in the response");
           }
         } else {
           console.error("Failed to fetch attachment details");
@@ -76,6 +75,21 @@ const UpdateTaskPopup: React.FC<UpdateTaskPopupProps> = ({
     };
     onUpdate(updatedTask);
     onClose();
+  };
+
+  const handleDownload = () => {
+    if (attachment && attachment.fileUrl) {
+      // Trigger download by creating a temporary <a> element and clicking it
+      const link = document.createElement("a");
+      link.href = attachment.fileUrl;
+      link.download = attachment.fileName; // Optional: specify the filename
+      link.target = "_blank"; // Optional: open in new tab if needed
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      console.error("No attachment URL available for download");
+    }
   };
 
   return (
@@ -159,9 +173,9 @@ const UpdateTaskPopup: React.FC<UpdateTaskPopupProps> = ({
           {attachment && (
             <div className="attachment-section">
               <h3>Attachment:</h3>
-              <a href={attachment.fileUrl} download={attachment.fileName}>
-                <button className="btn-download">Download Attachment</button>
-              </a>
+              <button className="btn-download" onClick={handleDownload}>
+                Download Attachment
+              </button>
             </div>
           )}
         </div>

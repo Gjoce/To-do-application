@@ -58,8 +58,11 @@ public class AttachmentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No attachments found for the given task ID");
         }
 
-        return ResponseEntity.ok(attachments.get(0));
+        // Return the file URL (assuming it's stored in the filePath field)
+        String fileUrl = attachments.get(0).getFilePath(); // External URL e.g., OneDrive link
+        return ResponseEntity.ok(Map.of("fileUrl", fileUrl));
     }
+
 
 
 
@@ -75,7 +78,6 @@ public class AttachmentController {
             byte[] fileContent = Files.readAllBytes(filePath);
             String contentType = Files.probeContentType(filePath);
 
-
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
@@ -84,6 +86,7 @@ public class AttachmentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
 
 
