@@ -40,12 +40,13 @@ public class AttachmentController {
         }
 
         try {
-
-            attachmentService.saveAttachment(file, taskId);
-
+            System.out.println("Calling saveAttachment method...");
+            attachmentService.saveAttachment(file, taskId);  // Log this
+            System.out.println("Attachment saved successfully");
 
             return ResponseEntity.ok(new SuccessResponse("File uploaded successfully", file.getOriginalFilename()));
         } catch (IOException e) {
+            e.printStackTrace();  // Print exception stack trace for debugging
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse("Error uploading file: " + e.getMessage()));
         }

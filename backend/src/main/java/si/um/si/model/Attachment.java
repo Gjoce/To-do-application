@@ -26,6 +26,7 @@ public class Attachment {
     @Column(name = "uploaded_at", updatable = false)
     private LocalDateTime uploadedAt = LocalDateTime.now();
 
+
     // Getters and setters
     public Long getId() {
         return id;
