@@ -11,6 +11,12 @@ on:
 jobs:
   build-backend:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8
+        options: --env MYSQL_ROOT_PASSWORD=geslo --env MYSQL_DATABASE=todo_db --health-cmd="mysqladmin ping --silent" --health-timeout=10s --health-retries=5 --health-start-period=30s
+        ports:
+          - 3306:3306
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -28,6 +34,13 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+
+      - name: Wait for MySQL to be ready
+        run: |
+          until mysql -h 127.0.0.1 -u root -p$MYSQL_ROOT_PASSWORD -e 'SHOW DATABASES'; do
+            echo "Waiting for database to be ready..."
+            sleep 5
+          done
 
       - name: Build Backend
         run: mvn clean install
@@ -81,6 +94,13 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+
+      - name: Wait for MySQL to be ready
+        run: |
+          until mysql -h 127.0.0.1 -u root -p$MYSQL_ROOT_PASSWORD -e 'SHOW DATABASES'; do
+            echo "Waiting for database to be ready..."
+            sleep 5
+          done
 
       - name: Run Unit Tests
         run: mvn -Dtest=si.um.si.unit_tests.* test
