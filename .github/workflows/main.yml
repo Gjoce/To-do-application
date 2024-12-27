@@ -126,6 +126,6 @@ jobs:
           done
 
       - name: Run Unit Tests
-        run: mvn -Dtest="si.um.si.unit_tests.*" test
+        run: mvn test -Dtest="si.um.si.unit_tests.*" -Dorg.junit.platform.launcher.filters.tag=unit --no-transfer-progress
         working-directory: ./backend
 
