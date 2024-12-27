@@ -126,6 +126,6 @@ jobs:
           done
 
       - name: Run Unit Tests
-        run: mvn -Dtest=si.um.si.unit_tests.* test
+        run: mvn -Dtest="si.um.si.unit_tests.*" test
         working-directory: ./backend
 
