@@ -46,6 +46,7 @@ jobs:
         run: mvn clean install
         working-directory: ./backend
 
+
   build-frontend:
     runs-on: ubuntu-latest
     needs: build-backend
