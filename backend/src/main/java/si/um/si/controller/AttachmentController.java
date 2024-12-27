@@ -41,12 +41,12 @@ public class AttachmentController {
 
         try {
             System.out.println("Calling saveAttachment method...");
-            attachmentService.saveAttachment(file, taskId);  // Log this
+            attachmentService.saveAttachment(file, taskId);
             System.out.println("Attachment saved successfully");
 
             return ResponseEntity.ok(new SuccessResponse("File uploaded successfully", file.getOriginalFilename()));
         } catch (IOException e) {
-            e.printStackTrace();  // Print exception stack trace for debugging
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse("Error uploading file: " + e.getMessage()));
         }
@@ -59,8 +59,8 @@ public class AttachmentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No attachments found for the given task ID");
         }
 
-        // Return the file URL (assuming it's stored in the filePath field)
-        String fileUrl = attachments.get(0).getFilePath(); // External URL e.g., OneDrive link
+
+        String fileUrl = attachments.get(0).getFilePath();
         return ResponseEntity.ok(Map.of("fileUrl", fileUrl));
     }
 

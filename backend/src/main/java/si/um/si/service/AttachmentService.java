@@ -30,21 +30,21 @@ public class AttachmentService {
 
     public Attachment saveAttachment(MultipartFile file, Long taskId) throws IOException {
         String fileName = file.getOriginalFilename();
-        String fileUrl = uploadFileToOneDrive(file);  // Upload to OneDrive
+        String fileUrl = uploadFileToOneDrive(file);
 
-        // Log the file information
+
         System.out.println("File uploaded to OneDrive: " + fileName + " URL: " + fileUrl);
 
         Attachment attachment = new Attachment();
-        attachment.setTaskId(taskId);  // Set task ID
-        attachment.setFileName(fileName);  // Set file name
-        attachment.setFilePath(fileUrl);  // Set file URL (from OneDrive)
-        attachment.setFileType(file.getContentType());  // Set file type (MIME type)
+        attachment.setTaskId(taskId);
+        attachment.setFileName(fileName);
+        attachment.setFilePath(fileUrl);
+        attachment.setFileType(file.getContentType());
 
-        // Log the attachment details before saving
+
         System.out.println("Saving attachment: " + attachment.toString());
 
-        // Save the attachment to the database
+
         Attachment savedAttachment = attachmentRepository.save(attachment);
         System.out.println("Attachment saved with ID: " + savedAttachment.getId());
 
@@ -59,17 +59,17 @@ public class AttachmentService {
 
         HttpEntity<byte[]> entity = new HttpEntity<>(file.getBytes(), headers);
 
-        // Construct the URL for uploading the file to OneDrive
+
         String uploadUrl = oneDriveUploadUrl + fileName + ":/content";
         RestTemplate restTemplate = new RestTemplate();
 
         try {
-            // Send the file to OneDrive using the PUT method
+
             ResponseEntity<String> response = restTemplate.exchange(uploadUrl, HttpMethod.PUT, entity, String.class);
 
-            // Check for successful response
+
             if (response.getStatusCode() == HttpStatus.CREATED) {
-                return extractFileUrlFromResponse(response.getBody()); // Extract file URL from response
+                return extractFileUrlFromResponse(response.getBody());
             } else {
                 throw new IOException("Failed to upload file to OneDrive: " + response.getStatusCode());
             }
@@ -83,10 +83,10 @@ public class AttachmentService {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(responseBody);
 
-            // Log the entire response for debugging
+
             System.out.println("OneDrive response: " + responseBody);
 
-            // Extract the webUrl (file URL) from the response body
+
             String fileUrl = rootNode.path("webUrl").asText(null);
             if (fileUrl == null || fileUrl.isEmpty()) {
                 throw new IOException("File URL not found in OneDrive response");
