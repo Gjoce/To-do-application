@@ -38,7 +38,7 @@ jobs:
 
       - name: Create application.properties for MySQL
         run: |
-          echo "spring.datasource.url=jdbc:mysql://localhost:3306/todo_db?useSSL=false&serverTimezone=UTC" > ./backend/src/main/resources/application.properties
+          echo "spring.datasource.url=jdbc:mysql://mysql:3306/todo_db?useSSL=false&serverTimezone=UTC" > ./backend/src/main/resources/application.properties
           echo "spring.datasource.username=root" >> ./backend/src/main/resources/application.properties
           echo "spring.datasource.password=geslo" >> ./backend/src/main/resources/application.properties
           echo "spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver" >> ./backend/src/main/resources/application.properties
@@ -93,6 +93,13 @@ jobs:
   test-backend:
     runs-on: ubuntu-latest
     needs: build-frontend
+    services:
+      mysql:
+        image: mysql:8
+        options: --env MYSQL_ROOT_PASSWORD=geslo --env MYSQL_DATABASE=todo_db --health-cmd="mysqladmin ping --silent" --health-timeout=10s --health-retries=5 --health-start-period=30s
+        ports:
+          - 3306:3306
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -119,5 +126,6 @@ jobs:
           done
 
       - name: Run Unit Tests
-        run: mvn -Dtest=si.um.si.unit_tests.* test
+        run: mvn test --no-transfer-progress
         working-directory: ./backend
+
