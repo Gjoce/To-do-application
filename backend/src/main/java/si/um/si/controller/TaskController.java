@@ -30,7 +30,13 @@ public class TaskController {
     }
 
     @GetMapping("api/tasks")
-    public List<Task> getAllTasks(@RequestParam(required = false) String status) {
+    public List<Task> getAllTasks(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) Boolean favorite,
+            @RequestParam Long userId) {
+        if (favorite != null && favorite) {
+            return taskService.getFavoriteTasksByUser(userId);
+        }
         if (status != null) {
             try {
                 Taskstatus taskStatus = Taskstatus.valueOf(status.toUpperCase());
@@ -39,8 +45,9 @@ public class TaskController {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid status: " + status);
             }
         }
-        return taskService.getAllTasks(); // Retrieve all tasks if no status is provided
+        return taskService.getAllTasks();
     }
+
 
     @GetMapping("api/tasks/{id}")
     public ResponseEntity<Task> getTaskById(@PathVariable long id) {
@@ -65,5 +72,17 @@ public class TaskController {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("api/tasks/favorites")
+    public List<Task> getFavoriteTasks(@RequestParam Long userId) {
+        return taskService.getFavoriteTasksByUser(userId);
+    }
+    @PutMapping("api/tasks/{id}/favorite")
+    public ResponseEntity<Task> updateFavoriteStatus(@PathVariable long id, @RequestParam boolean isFavorite) {
+        return taskService.updateFavoriteStatus(id, isFavorite)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
 }
 

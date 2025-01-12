@@ -69,6 +69,19 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
+    public List<Task> getFavoriteTasksByUser(Long userId) {
+        return taskRepository.findByFavoriteAndUserId(true, userId);
+    }
+
+    public Optional<Task> updateFavoriteStatus(long taskId, boolean isFavorite) {
+        return taskRepository.findById(taskId)
+                .map(task -> {
+                    task.setFavorite(isFavorite);
+                    return taskRepository.save(task);
+                });
+    }
+
+
 
     public List<Task> getTasksByStatus(Taskstatus status) {
         return taskRepository.findByStatus(status);

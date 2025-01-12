@@ -23,6 +23,9 @@ public class Task {
     @Column(nullable = false)
     private Taskstatus status;
 
+    @Column(nullable = false)
+    private boolean favorite = false;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Taskpriority priority;
@@ -39,6 +42,7 @@ public class Task {
     @JsonBackReference  // Ignore this side during serialization
     private Users user;
 
+
     public Task() {}
 
     public Task(String title, String description, Taskstatus status, Taskpriority priority, LocalDateTime dueDate, Users user) {
@@ -54,6 +58,14 @@ public class Task {
     // Getters and Setters
     public long getId() {
         return id;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     public void setId(long id) {
