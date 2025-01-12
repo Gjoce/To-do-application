@@ -1,7 +1,7 @@
+import React, { useEffect, useState } from "react";
 import TaskCard from "./Task";
 import UpdateTaskPopup from "./UpdateTaskPopup";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useEffect, useState } from "react";
 
 interface Task {
   id: number;
@@ -9,6 +9,7 @@ interface Task {
   description?: string;
   status: string;
   priority: string;
+  favorite: boolean;
   dueDate: string;
 }
 
@@ -24,9 +25,7 @@ export default function TaskList() {
   useEffect(() => {
     const fetchTasks = async () => {
       const userId = localStorage.getItem("userId");
-
       if (!userId) {
-        console.error("User ID is missing or the user is not logged in.");
         setError("User not logged in.");
         setLoading(false);
         return;
@@ -34,7 +33,7 @@ export default function TaskList() {
 
       try {
         const response = await fetch(
-          `http://localhost:8080/api/users/${userId}/tasks`
+            `http://localhost:8080/api/users/${userId}/tasks`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch tasks");
@@ -42,9 +41,9 @@ export default function TaskList() {
         const data = await response.json();
         setTasks(data);
         setLoading(false);
-      } catch (error) {
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
         setLoading(false);
-        setError(error instanceof Error ? error.message : "An error occurred");
       }
     };
 
@@ -52,46 +51,51 @@ export default function TaskList() {
   }, []);
 
   useEffect(() => {
-    let filtered;
-    if (filter === "completed") {
-      filtered = tasks.filter((task) => task.status === "FINISHED");
-    } else if (filter === "pending") {
-      filtered = tasks.filter((task) => task.status === "PENDING");
-    } else if (filter === "in progress") {
-      filtered = tasks.filter((task) => task.status === "RUNNING");
-    } else {
-      filtered = tasks;
-    }
+    const filtered =
+        filter === "completed"
+            ? tasks.filter((task) => task.status === "FINISHED")
+            : filter === "pending"
+                ? tasks.filter((task) => task.status === "PENDING")
+                : filter === "in progress"
+                    ? tasks.filter((task) => task.status === "RUNNING")
+                    : filter === "Favourites"
+                        ? tasks.filter((task) => task.favorite) // Filter for favorite tasks
+                        : tasks;
+
     setFilteredTasks(filtered);
   }, [filter, tasks]);
 
-  const handleFilterChange = (newFilter: string) => {
-    setFilter(newFilter);
-  };
+  const handleFilterChange = (newFilter: string) => setFilter(newFilter);
 
-  const handleUpdateTask = async (updatedTask: Task) => {
+  const handleFavoriteToggle = async (id: number, newFavorite: boolean) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/tasks/${updatedTask.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedTask),
-        }
+          `http://localhost:8080/api/tasks/${id}/favorite?isFavorite=${newFavorite}`,
+          {
+            method: "PUT",
+          }
       );
       if (!response.ok) {
-        throw new Error("Failed to update task");
+        throw new Error("Failed to update favorite status");
       }
       setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === updatedTask.id ? updatedTask : task
-        )
+          prevTasks.map((task) =>
+              task.id === id ? { ...task, favorite: newFavorite } : task
+          )
       );
     } catch (error) {
-      console.error("Error updating task:", error);
+      console.error("Error updating favorite status:", error);
     }
+  };
+
+  const handleEditClick = (task: Task) => {
+    setSelectedTask(task);
+    setPopupVisible(true);
+  };
+
+  const handlePopupClose = () => {
+    setPopupVisible(false);
+    setSelectedTask(null);
   };
 
   const handleDeleteTask = async (id: number) => {
@@ -108,85 +112,54 @@ export default function TaskList() {
     }
   };
 
-  const handleEditClick = (task: Task) => {
-    setSelectedTask(task);
-    setPopupVisible(true);
-  };
-
-  const handlePopupClose = () => {
-    setPopupVisible(false);
-    setSelectedTask(null);
-  };
-
-  if (loading) {
-    return <div className="text-center">Loading tasks...</div>;
-  }
-
-  if (error) {
-    return <div className="text-center text-danger">Error: {error}</div>;
-  }
+  if (loading) return <div className="text-center">Loading tasks...</div>;
+  if (error) return <div className="text-center text-danger">Error: {error}</div>;
 
   return (
-    <div className="container mt-4">
-      <div className="d-flex justify-content-center mb-4">
-        <button
-          className={`btn btn-outline-primary me-2 ${
-            filter === "all" ? "active" : ""
-          }`}
-          onClick={() => handleFilterChange("all")}
-        >
-          All
-        </button>
-        <button
-          className={`btn btn-outline-success me-2 ${
-            filter === "completed" ? "active" : ""
-          }`}
-          onClick={() => handleFilterChange("completed")}
-        >
-          Completed
-        </button>
-        <button
-          className={`btn btn-outline-warning me-2 ${
-            filter === "pending" ? "active" : ""
-          }`}
-          onClick={() => handleFilterChange("pending")}
-        >
-          Pending
-        </button>
-        <button
-          className={`btn btn-outline-info ${
-            filter === "in progress" ? "active" : ""
-          }`}
-          onClick={() => handleFilterChange("in progress")}
-        >
-          In Progress
-        </button>
-      </div>
-
-      <div className="row">
-        {filteredTasks.map((task) => (
-          <div className="col-md-4 mb-4" key={task.id}>
-            <TaskCard
-              title={task.title}
-              description={task.description}
-              status={task.status}
-              priority={task.priority}
-              dueDate={task.dueDate}
-              onDelete={() => handleDeleteTask(task.id)}
-              onEdit={() => handleEditClick(task)}
+      <div className="container mt-4">
+        <div className="d-flex justify-content-center mb-4">
+          {["all", "completed", "pending", "in progress", "Favourites"].map(
+              (type) => (
+                  <button
+                      key={type}
+                      className={`btn me-2 ${
+                          filter === type ? "btn-primary" : "btn-outline-primary"
+                      }`}
+                      onClick={() => handleFilterChange(type)}
+                  >
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </button>
+              )
+          )}
+        </div>
+        <div className="row">
+          {filteredTasks.map((task) => (
+              <div className="col-md-4 mb-4" key={task.id}>
+                <TaskCard
+                    id={task.id}
+                    title={task.title}
+                    description={task.description}
+                    status={task.status}
+                    priority={task.priority}
+                    initialFavorite={task.favorite}
+                    dueDate={task.dueDate}
+                    onDelete={() => handleDeleteTask(task.id)}
+                    onEdit={() => handleEditClick(task)}
+                    onFavouriteToggle={(newFavorite) =>
+                        handleFavoriteToggle(task.id, newFavorite)
+                    }
+                />
+              </div>
+          ))}
+        </div>
+        {selectedTask && (
+            <UpdateTaskPopup
+                isVisible={isPopupVisible}
+                onClose={handlePopupClose}
+                task={selectedTask}
+                onUpdate={() => {}}
             />
-          </div>
-        ))}
+        )}
       </div>
-
-      {selectedTask && (
-        <UpdateTaskPopup
-          isVisible={isPopupVisible}
-          onClose={handlePopupClose}
-          task={selectedTask}
-          onUpdate={handleUpdateTask}
-        />
-      )}
-    </div>
   );
 }

@@ -93,3 +93,23 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.favourite-icon {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.favourite-icon {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.favourite-icon.loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+
