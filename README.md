@@ -327,27 +327,38 @@ Izvaja operacije za shranjevanje, iskanje in brisanje podatkov o uporabnikih.
 #### Namestitev Backenda
 
 2. **Namestitev odvisnosti in gradnja projekta:**
-    Zaženite naslednji ukaz Maven, da namestite odvisnosti in zgradite projekt
+    Zaženite naslednji ukaz Maven preko terminala, da namestite odvisnosti in zgradite projekt. (IntelliJ avtomatsko to naredi)
    ```bash
    mvn clean install
 
 1. **Nastavite .env datoteko:**
      V korenu backend direktorija ustvarite .env datoteko.
-     Dodajte konfiguracijo za MySQL:
+     Dodajte konfiguracijo za MySQL in OneDrive:
    ```bash
          SPRING_DATASOURCE_URL={VAS URL V OBLIKI} jdbc:mysql://localhost:[PORT]/[DATABAZA]?useSSL=false&serverTimezone=UTC
          SPRING_DATASOURCE_USERNAME={VAS USERNAME}
          SPRING_DATASOURCE_PASSWORD={VASE GESLO}
+
+   		 GOOGLE_CLIENT_ID={VAS ID}
+		 GOOGLE_CLIENT_SECRET={VAS SECRET}
+		 GOOGLE_REDIRECT_URI={VAS URI}
+	
+		 ACCESS_TOKEN={VAS TOKEN}
+   		 ONEDRIVE_UPLOAD_URL={VAS URL}
   Poskrbite, da imate v IntelliJ ***nameščen .env plugin***, da lahko Spring Boot prepozna .env datoteko.
 
-2. **Konfigurirajte IntelliJ za uporabo .env:**
+2. **Konfigurirajte IntelliJ za uporabo .env in namestitev nove (SpringBoot) konfiguracije:**
 
-    Odprite Run/Debug Configurations v IntelliJ.
-    Pod ***Environment Variables*** dodajte .env datoteko.
+    Odprite Run/Edit Configurations v IntelliJ.
+   	1. Najprej dodajte novo SpringBoot konfiguracijo z "+".
+   	2. Pod `Build and run` nastavite jdk na java 21.
+   	3. Za main class nastavite `si.um.si.ToDoAppApplication`.
+   	4. Obkljukajte `Enable EnvFile`.
+    5. Pod ***Environment Variables*** dodajte .env datoteko.
   
-3. **Zaženite backend:**
+4. **Zaženite backend:**
 
-    V IntelliJ odprite meni ***Run*** in zaženite backend strežnik ali pa to naredite z naslednjim ukazom:
+    V IntelliJ odprite meni ***Run*** in zaženite backend strežnik (ToDoApplication) ali pa to naredite z naslednjim ukazom:
      ```bash
      mvn spring-boot:start
      ```
