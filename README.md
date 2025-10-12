@@ -292,7 +292,11 @@ Izvaja operacije za shranjevanje, iskanje in brisanje podatkov o uporabnikih.
 - **Java SDK 21**
 - **MySQL** (preverite, ali deluje strežnik MySQL)
 - **IntelliJ IDEA(2024.2.0.2)** (za razvoj backend-a)
-- **Visual Studio Code** (za razvoj frontend-a)
+- **Visual Studio Code** (za razvoj frontend-a) <br />
+**Ce zelite delati tudi z datotekami**
+- Microsoft OneDrive API Credentials – za povezavo z OneDrive
+	- Ustvarite aplikacijo v Microsoft Azure App Registrations
+	- Dodajte `ACCESS_TOKEN` in `ONEDRIVE_UPLOAD_URL` v `.env` datoteko
 
 ### Namestitev
 
@@ -338,10 +342,6 @@ Izvaja operacije za shranjevanje, iskanje in brisanje podatkov o uporabnikih.
          SPRING_DATASOURCE_URL={VAS URL V OBLIKI} jdbc:mysql://localhost:[PORT]/[DATABAZA]?useSSL=false&serverTimezone=UTC
          SPRING_DATASOURCE_USERNAME={VAS USERNAME}
          SPRING_DATASOURCE_PASSWORD={VASE GESLO}
-
-   		 GOOGLE_CLIENT_ID={VAS ID}
-		 GOOGLE_CLIENT_SECRET={VAS SECRET}
-		 GOOGLE_REDIRECT_URI={VAS URI}
 	
 		 ACCESS_TOKEN={VAS TOKEN}
    		 ONEDRIVE_UPLOAD_URL={VAS URL}
