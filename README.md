@@ -426,6 +426,7 @@ project-root/
 
 ### Imenovanje
 - **Spremenljivke**: Imenovanje spremenljivk je v camelCase formatu.
+- **Razredi in Enumi**: Imenovanje razrede je v PascalCase.
 - **Datoteke**: Imenovanje posameznih fajlov je v PascalCase.
 - **Funkcije in metode**: Ime funkcij in metod so prav tako v camelCase formatu, je pa opisno in se začne z glagolom (npr. `getTaskById`).
 
