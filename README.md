@@ -591,3 +591,53 @@ Testiranje dogodkov:
 -Pridobite vse naloge prek /api/tasks z metodo GET.
 -Filtrirajte naloge z dodatkom parametra ?status=<STATUS>.
 -Dodajte novo nalogo z metodo POST in določite, kateremu uporabniku pripada.
+
+### Testiranje funkcionalnosti z unit tests (pricakovanja)
+1. EventService – getParticipants() - Preveriti, ali metoda getUserAppliedEvents(userId) pravilno vrne vse dogodke, na katere je uporabnik prijavljen.
+- Vhodni podatki: userId: ID uporabnika (npr. 1L)
+- Simulirani dogodki: “Workshop 1” in “Workshop 2”.
+- Izhodni podatki: Seznam List<Event> dogodkov, ali izjema IllegalArgumentException
+Pričakovani rezultati:
+- Če uporabnik obstaja in je prijavljen → vrne seznam z dogodkoma “Workshop 1” in “Workshop 2”.
+- Če uporabnik ne obstaja → vrže IllegalArgumentException("User not found.").
+- Če uporabnik obstaja, a ni prijavljen na dogodke → vrne prazen seznam.
+2. TaskService – getAllTasks() - Preveriti delovanje metode getAllTasks(), ki vrne vse naloge v sistemu, ter obnašanje v primeru prazne baze ali napake repozitorija.
+- Vhodni podatki: Brez vhodnih parametrov
+- Simulirane naloge: “Task 1”, “Task 2”
+- Možnost praznega seznama ali izjeme iz repozitorija.
+- Izhodni podatki: Seznam List<Task> ali izjema RuntimeException
+- Pričakovani rezultati:
+- Če naloge obstajajo → vrne seznam z dvema nalogama.
+- Če nalog ni → vrne prazen seznam.
+- Če repozitorij javi napako → vrže RuntimeException("Database failure").
+3. EventService – getUserAppliedEvents() - Preveriti, ali metoda getUserAppliedEvents(userId) pravilno vrne vse dogodke, na katere je uporabnik prijavljen.
+- Vhodni podatki: userId: ID uporabnika (npr. 1L)
+- Simulirani dogodki: “Workshop 1” in “Workshop 2”.
+- Izhodni podatki: Seznam List<Event> dogodkov ali izjema IllegalArgumentException
+- Pričakovani rezultati:
+- Če uporabnik obstaja in je prijavljen → vrne seznam z dogodkoma “Workshop 1” in “Workshop 2”.
+- Če uporabnik ne obstaja → vrže IllegalArgumentException("User not found.").
+- Če uporabnik obstaja, a ni prijavljen na dogodke → vrne prazen seznam.
+4. TaskService – getFavoriteTasksByUser() -Preveriti, ali metoda getFavoriteTasksByUser(userId) pravilno vrne seznam nalog, ki so označene kot “favorite” za določenega uporabnika.
+- Vhodni podatki: userId: ID uporabnika (npr. 10L, 20L, 30L), naloge z lastnostjo favorite = true ali brez nje.
+- Izhodni podatki: Seznam List<Task> ,ali izjema RuntimeException
+- Pričakovani rezultati:
+- Če uporabnik ima priljubljene naloge → vrne seznam nalog z favorite = true.
+- Če uporabnik nima priljubljenih nalog → vrne prazen seznam.
+- Če pride do napake v repozitoriju → vrže RuntimeException("Database connection error").
+
+5. TaskService – updateFavoriteStatus()  - Preveriti, ali metoda updateFavoriteStatus(taskId, status) pravilno posodobi lastnost “favorite” pri izbrani nalogi in pravilno reagira, če naloga ne obstaja.
+- Vhodni podatki: taskId: ID naloge (npr. 1L, 2L, 99L),
+- status: nova vrednost (true ali false)
+- Izhodni podatki: Optional<Task> – posodobljen objekt, ali prazen Optional, če naloga ne obstaja.
+Pričakovani rezultati:
+- Če naloga obstaja → status se spremeni na posredovano vrednost (true ali false).
+- Če naloga ne obstaja → metoda vrne Optional.empty() brez shranjevanja sprememb.
+
+6. UsersService – getUserAppliedEvents() - Preveriti, ali metoda getUserAppliedEvents(userId) v razredu UsersService pravilno vrne dogodke, na katere se je uporabnik prijavil.
+- Vhodni podatki: userId: ID uporabnika (npr. 1L ali 99L)
+- Dogodki: “Workshop”, “Seminar”
+- Izhodni podatki: Seznam List<Event> ali izjema IllegalArgumentException
+- Pričakovani rezultati:
+- Če uporabnik obstaja → metoda vrne seznam njegovih dogodkov.
+- Če uporabnik ne obstaja → vrže IllegalArgumentException("User not found").

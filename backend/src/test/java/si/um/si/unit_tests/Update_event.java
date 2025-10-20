@@ -1,9 +1,6 @@
-package si.um.si.unit_tests;
-
-
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.api.Test;
 import si.um.si.model.Event;
 import si.um.si.model.Users;
 import si.um.si.model.enums.Role;
@@ -34,7 +31,7 @@ public class Update_event {
         Event mockEvent = mock(Event.class);
 
         // Mock behavior
-        when(mockAdmin.getRole()).thenReturn(si.um.si.model.enums.Role.ADMIN);
+        when(mockAdmin.getRole()).thenReturn(Role.ADMIN);
         when(mockUserRepository.findById(1L)).thenReturn(Optional.of(mockAdmin));
         when(mockEventRepository.findById(1L)).thenReturn(Optional.of(mockEvent));
         when(mockEventRepository.save(any(Event.class))).thenReturn(mockEvent);

@@ -1,4 +1,3 @@
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,13 +11,14 @@ import si.um.si.repository.EvenRepository;
 import si.um.si.repository.UserRepository;
 import si.um.si.service.EventService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class Delete_event {
+class EventService_GetParticipants_Tests {
 
     @Mock
     private EvenRepository eventRepository;
@@ -31,13 +31,13 @@ class Delete_event {
 
     private Users adminUser;
     private Users regularUser;
-    private Event mockEvent;
+    private Event event;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         MockitoAnnotations.openMocks(this);
 
-        // Initialize test data
+        // Set up admin and regular user
         adminUser = new Users();
         adminUser.setId(1L);
         adminUser.setRole(Role.ADMIN);
@@ -46,65 +46,59 @@ class Delete_event {
         regularUser.setId(2L);
         regularUser.setRole(Role.USER);
 
-        mockEvent = new Event();
-        mockEvent.setId(1L);
-        mockEvent.setName("Sample Event");
+        // Set up event with participants
+        event = new Event();
+        event.setId(10L);
+        event.setName("Tech Conference");
+        List<Users> participants = new ArrayList<>();
+        participants.add(regularUser);
+        event.setParticipants(participants);
     }
 
-    @AfterEach
-    void tearDown() {
-        // Reset the mocks after each test
-        reset(eventRepository, userRepository);
-    }
-
+    // ✅ Positive Scenario
     @Test
-    @DisplayName("Delete Event - Admin User")
-    void deleteEvent_shouldDeleteEventWhenUserIsAdmin() {
-        // Arrange
+    @DisplayName("GetParticipants – Admin can view event participants")
+    void getParticipants_admin_ok() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
-        when(eventRepository.findById(1L)).thenReturn(Optional.of(mockEvent));
+        when(eventRepository.findById(10L)).thenReturn(Optional.of(event));
 
-        // Act
-        eventService.deleteEvent(1L, 1L);
+        List<Users> result = eventService.getParticipants(10L, 1L);
 
-        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(regularUser, result.get(0));
         verify(userRepository, times(1)).findById(1L);
-        verify(eventRepository, times(1)).findById(1L);
-        verify(eventRepository, times(1)).delete(mockEvent);
+        verify(eventRepository, times(1)).findById(10L);
     }
 
+    // ❌ Negative Scenario 1: Non-admin user tries to view participants
     @Test
-    @DisplayName("Delete Event - Non-Admin User")
-    void deleteEvent_shouldThrowExceptionWhenUserIsNotAdmin() {
-        // Arrange
+    @DisplayName("GetParticipants – Non-admin user cannot view participants")
+    void getParticipants_nonAdmin_forbidden() {
         when(userRepository.findById(2L)).thenReturn(Optional.of(regularUser));
 
-        // Act & Assert
         SecurityException exception = assertThrows(SecurityException.class, () -> {
-            eventService.deleteEvent(1L, 2L);
+            eventService.getParticipants(10L, 2L);
         });
 
-        assertEquals("Only admins can delete events.", exception.getMessage());
+        assertEquals("Only admins can view participants.", exception.getMessage());
         verify(userRepository, times(1)).findById(2L);
         verify(eventRepository, never()).findById(anyLong());
-        verify(eventRepository, never()).delete(any(Event.class));
     }
 
+    // ❌ Negative Scenario 2: Event not found
     @Test
-    @DisplayName("Delete Event - Non-Existent Event")
-    void deleteEvent_shouldThrowExceptionWhenEventDoesNotExist() {
-        // Arrange
+    @DisplayName("GetParticipants – Event not found throws exception")
+    void getParticipants_eventNotFound() {
         when(userRepository.findById(1L)).thenReturn(Optional.of(adminUser));
-        when(eventRepository.findById(1L)).thenReturn(Optional.empty());
-
+        when(eventRepository.findById(99L)).thenReturn(Optional.empty());
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            eventService.deleteEvent(1L, 1L);
+            eventService.getParticipants(99L, 1L);
         });
 
         assertEquals("Event not found.", exception.getMessage());
         verify(userRepository, times(1)).findById(1L);
-        verify(eventRepository, times(1)).findById(1L);
-        verify(eventRepository, never()).delete(any(Event.class));
+        verify(eventRepository, times(1)).findById(99L);
     }
 }
