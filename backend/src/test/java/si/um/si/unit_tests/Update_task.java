@@ -1,24 +1,22 @@
-package si.um.si.unit_tests;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import si.um.si.model.Users;
-import si.um.si.model.Task;
-import si.um.si.model.Event;
-import si.um.si.repository.UserRepository;
-import si.um.si.repository.TaskRepository;
-import si.um.si.repository.EvenRepository;
-import si.um.si.service.UsersService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import si.um.si.model.Event;
+import si.um.si.model.Task;
+import si.um.si.model.Users;
+import si.um.si.repository.EvenRepository;
+import si.um.si.repository.TaskRepository;
+import si.um.si.repository.UserRepository;
+import si.um.si.service.UsersService;
+
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
-import java.util.Optional;
-import java.util.List;
 
 public class Update_task {
 

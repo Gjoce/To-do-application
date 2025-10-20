@@ -1,21 +1,16 @@
-package si.um.si.unit_tests;
-
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import si.um.si.model.Event;
 import si.um.si.model.Users;
-import si.um.si.service.EventService;
 import si.um.si.repository.EvenRepository;
 import si.um.si.repository.UserRepository;
+import si.um.si.service.EventService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.mock;
 
 public class Apply_to_event {
 

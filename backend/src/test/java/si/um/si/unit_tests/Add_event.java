@@ -1,5 +1,3 @@
-package si.um.si.unit_tests;
-
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

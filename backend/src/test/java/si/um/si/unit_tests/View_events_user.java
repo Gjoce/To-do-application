@@ -1,4 +1,3 @@
-package si.um.si.unit_tests;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import si.um.si.model.Event;
@@ -8,8 +7,8 @@ import si.um.si.service.EventService;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class View_events_user {
     @Nested

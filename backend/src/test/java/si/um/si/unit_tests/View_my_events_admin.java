@@ -1,12 +1,9 @@
-package si.um.si.unit_tests;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import si.um.si.model.Event;
-import si.um.si.service.EventService;
 import si.um.si.repository.EvenRepository;
+import si.um.si.service.EventService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
