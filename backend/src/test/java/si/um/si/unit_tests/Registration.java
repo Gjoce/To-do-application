@@ -1,4 +1,4 @@
-package si.um.si.unit_tests; // Package statement
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

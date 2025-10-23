@@ -1,4 +1,4 @@
-package si.um.si.unit_tests;
+
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import si.um.si.model.Event;
