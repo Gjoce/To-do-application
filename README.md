@@ -292,7 +292,11 @@ Izvaja operacije za shranjevanje, iskanje in brisanje podatkov o uporabnikih.
 - **Java SDK 21**
 - **MySQL** (preverite, ali deluje strežnik MySQL)
 - **IntelliJ IDEA(2024.2.0.2)** (za razvoj backend-a)
-- **Visual Studio Code** (za razvoj frontend-a)
+- **Visual Studio Code** (za razvoj frontend-a) <br />
+**Ce zelite delati tudi z datotekami**
+- Microsoft OneDrive API Credentials – za povezavo z OneDrive
+	- Ustvarite aplikacijo v Microsoft Azure App Registrations
+	- Dodajte `ACCESS_TOKEN` in `ONEDRIVE_UPLOAD_URL` v `.env` datoteko
 
 ### Namestitev
 
@@ -327,27 +331,34 @@ Izvaja operacije za shranjevanje, iskanje in brisanje podatkov o uporabnikih.
 #### Namestitev Backenda
 
 2. **Namestitev odvisnosti in gradnja projekta:**
-    Zaženite naslednji ukaz Maven, da namestite odvisnosti in zgradite projekt
+    Zaženite naslednji ukaz Maven preko terminala, da namestite odvisnosti in zgradite projekt. (IntelliJ avtomatsko to naredi)
    ```bash
    mvn clean install
 
 1. **Nastavite .env datoteko:**
      V korenu backend direktorija ustvarite .env datoteko.
-     Dodajte konfiguracijo za MySQL:
+     Dodajte konfiguracijo za MySQL in OneDrive:
    ```bash
          SPRING_DATASOURCE_URL={VAS URL V OBLIKI} jdbc:mysql://localhost:[PORT]/[DATABAZA]?useSSL=false&serverTimezone=UTC
          SPRING_DATASOURCE_USERNAME={VAS USERNAME}
          SPRING_DATASOURCE_PASSWORD={VASE GESLO}
+	
+		 ACCESS_TOKEN={VAS TOKEN}
+   		 ONEDRIVE_UPLOAD_URL={VAS URL}
   Poskrbite, da imate v IntelliJ ***nameščen .env plugin***, da lahko Spring Boot prepozna .env datoteko.
 
-2. **Konfigurirajte IntelliJ za uporabo .env:**
+2. **Konfigurirajte IntelliJ za uporabo .env in namestitev nove (SpringBoot) konfiguracije:**
 
-    Odprite Run/Debug Configurations v IntelliJ.
-    Pod ***Environment Variables*** dodajte .env datoteko.
+    Odprite Run/Edit Configurations v IntelliJ.
+   	1. Najprej dodajte novo SpringBoot konfiguracijo z "+".
+   	2. Pod `Build and run` nastavite jdk na java 21.
+   	3. Za main class nastavite `si.um.si.ToDoAppApplication`.
+   	4. Obkljukajte `Enable EnvFile`.
+    5. Pod ***Environment Variables*** dodajte .env datoteko.
   
-3. **Zaženite backend:**
+4. **Zaženite backend:**
 
-    V IntelliJ odprite meni ***Run*** in zaženite backend strežnik ali pa to naredite z naslednjim ukazom:
+    V IntelliJ odprite meni ***Run*** in zaženite backend strežnik (ToDoApplication) ali pa to naredite z naslednjim ukazom:
      ```bash
      mvn spring-boot:start
      ```
@@ -414,7 +425,9 @@ project-root/
 ## Standardi Kodiranja
 
 ### Imenovanje
-- **Spremenljivke**: Imenovanje spremenljivk je v camelCase formatu. 
+- **Spremenljivke**: Imenovanje spremenljivk je v camelCase formatu.
+- **Razredi in Enumi**: Imenovanje razrede je v PascalCase.
+- **Datoteke**: Imenovanje posameznih fajlov je v PascalCase.
 - **Funkcije in metode**: Ime funkcij in metod so prav tako v camelCase formatu, je pa opisno in se začne z glagolom (npr. `getTaskById`).
 
 ### Struktura datotek
