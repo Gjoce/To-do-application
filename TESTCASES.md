@@ -36,6 +36,7 @@ Ta dokument predstavlja rezultate ročnega funkcionalnega testiranja, izvedenega
     - **Status:** PENDING
     - **Priority:** HIGH
     - **Due date:** 10. november 2025
+    - **Attach File** lokalni `.jpg` file
 5. Kliknil sem gumb "Add task"
 
 **Pričakovani rezultat:** Nova naloga se prikaže na seznamu nalog z vsemi pravilno prikazanimi vnesenimi podatki.
