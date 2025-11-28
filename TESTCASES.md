@@ -34,9 +34,8 @@ Ta dokument predstavlja rezultate ročnega funkcionalnega testiranja, izvedenega
     - **Task title:** Priprava dokumentacije
     - **Description:** Napiši poročilo za testiranje sistema
     - **Status:** PENDING
-    - **Priority:** HIGH
-    - **Due date:** 10. november 2025
-    - **Attach File** lokalni `.jpg` file
+    - **Priority:** LOW
+    - **Due date:** 28. november 2025
 5. Kliknil sem gumb "Add task"
 
 **Pričakovani rezultat:** Nova naloga se prikaže na seznamu nalog z vsemi pravilno prikazanimi vnesenimi podatki.
@@ -55,9 +54,8 @@ Ta dokument predstavlja rezultate ročnega funkcionalnega testiranja, izvedenega
 
 1. Na seznamu nalog sem poiskal prej ustvarjeno nalogo "Priprava dokumentacije"
 2. Kliknil sem na nalogo
-3. Spremenil sem naslednja polja:
-    - **Status:** Spremenil iz PENDING v COMPLETED
-    - **Due date:** Spremenil na 6. november 2025
+3. Spremenil sem naslednje polje:
+    - **Status:** Spremenil iz PENDING v FINISHED
 4. Kliknil sem "Update task"
 
 **Pričakovani rezultat:** Posodobljeni podatki se takoj prikažejo v tabeli/seznamu nalog brez napak ali zamikov.
