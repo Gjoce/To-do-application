@@ -159,7 +159,7 @@ jobs:
       - name: SonarCloud Scan (Backend)
         working-directory: ./backend
         run: |
-          mvn verify sonar:sonar \
+          mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=AnastasijaNechoska_To-do-application \
             -Dsonar.organization=anastasijanechoska \
             -Dsonar.host.url=https://sonarcloud.io \
